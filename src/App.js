@@ -36,7 +36,7 @@ class App extends React.Component {
           <Switch>
             <LayoutRoute
               exact
-              path="/login"
+              path="/"
               layout={EmptyLayout}
               component={props => (
                 <AuthPage {...props} authState={STATE_LOGIN} />
@@ -58,7 +58,7 @@ class App extends React.Component {
             />
             <LayoutRoute
               exact
-              path="/"
+              path="/dashboard"
               layout={MainLayout}
               component={DashboardPage}
             />

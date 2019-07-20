@@ -8,3 +8,24 @@
     justify-content: center;
   }
 }
+
+.card {
+  flex-direction: row;
+}
+
+.card-box {
+  position: relative;
+  width: 100%;
+}
+
+#logoEntidades {
+  margin:0 auto;
+  display:block;
+  max-height: 75px;
+}
+
+#logoIcon {
+  margin:0 auto;
+  display:block;
+  max-height: 45px;
+}

@@ -1,5 +1,7 @@
 {
   "projects": {
-    "default": "reduction-admin"
+    "default": "reduction-admin",
+    "prod": "cambioposadas-d69c9",
+    "staging": "cambioposadas-d69c9"
   }
 }

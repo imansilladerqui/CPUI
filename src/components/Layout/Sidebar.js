@@ -1,8 +1,6 @@
-import logo200Image from 'assets/img/logo/logo_200.png';
-import sidebarBgImage from 'assets/img/sidebar/sidebar-4.jpg';
+import cplogo from 'assets/img/logo/cplogo.svg';
 import SourceLink from 'components/SourceLink';
 import React from 'react';
-import FaGithub from 'react-icons/lib/fa/github';
 import {
   MdAccountCircle,
   MdArrowDropDownCircle,
@@ -28,7 +26,6 @@ import {
 } from 'react-icons/lib/md';
 import { NavLink } from 'react-router-dom';
 import {
-  // UncontrolledTooltip,
   Collapse,
   Nav,
   Navbar,
@@ -36,12 +33,6 @@ import {
   NavLink as BSNavLink,
 } from 'reactstrap';
 import bn from 'utils/bemnames';
-
-const sidebarBackground = {
-  backgroundImage: `url("${sidebarBgImage}")`,
-  backgroundSize: 'cover',
-  backgroundRepeat: 'no-repeat',
-};
 
 const navComponents = [
   { to: '/buttons', name: 'buttons', exact: false, Icon: MdRadioButtonChecked },
@@ -81,8 +72,8 @@ const pageContents = [
 ];
 
 const navItems = [
-  { to: '/', name: 'dashboard', exact: true, Icon: MdDashboard },
-  { to: '/cards', name: 'cards', exact: false, Icon: MdWeb },
+  { to: '/', name: 'Panel de Control', exact: true, Icon: MdDashboard },
+  { to: '/cards', name: 'Tabla', exact: false, Icon: MdWeb },
   { to: '/charts', name: 'charts', exact: false, Icon: MdInsertChart },
   { to: '/widgets', name: 'widgets', exact: false, Icon: MdWidgets },
 ];
@@ -108,23 +99,21 @@ class Sidebar extends React.Component {
 
   render() {
     return (
-      <aside className={bem.b()} data-image={sidebarBgImage}>
-        <div className={bem.e('background')} style={sidebarBackground} />
+      <aside className={bem.b()} id="sidebar">
+        <div className={bem.e('background')}/>
         <div className={bem.e('content')}>
           <Navbar>
             <SourceLink className="navbar-brand d-flex">
               <img
-                src={logo200Image}
-                width="40"
-                height="30"
+                src={cplogo}
+                width="170"
+                height="70"
                 className="pr-2"
                 alt=""
               />
-              <span className="text-white">
-                Reduction <FaGithub />
-              </span>
             </SourceLink>
           </Navbar>
+
           <Nav vertical>
             {navItems.map(({ to, name, exact, Icon }, index) => (
               <NavItem key={index} className={bem.e('nav-item')}>
@@ -162,6 +151,7 @@ class Sidebar extends React.Component {
                 />
               </BSNavLink>
             </NavItem>
+
             <Collapse isOpen={this.state.isOpenComponents}>
               {navComponents.map(({ to, name, exact, Icon }, index) => (
                 <NavItem key={index} className={bem.e('nav-item')}>
@@ -200,6 +190,7 @@ class Sidebar extends React.Component {
                 />
               </BSNavLink>
             </NavItem>
+
             <Collapse isOpen={this.state.isOpenContents}>
               {navContents.map(({ to, name, exact, Icon }, index) => (
                 <NavItem key={index} className={bem.e('nav-item')}>
@@ -238,6 +229,7 @@ class Sidebar extends React.Component {
                 />
               </BSNavLink>
             </NavItem>
+
             <Collapse isOpen={this.state.isOpenPages}>
               {pageContents.map(({ to, name, exact, Icon }, index) => (
                 <NavItem key={index} className={bem.e('nav-item')}>

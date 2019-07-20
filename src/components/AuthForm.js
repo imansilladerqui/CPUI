@@ -1,9 +1,26 @@
-import logo200Image from 'assets/img/logo/logo_200.png';
+import logocp from 'assets/img/logo/cplogo.svg';
 import PropTypes from 'prop-types';
-import React from 'react';
+import {withRouter} from 'react-router';
+import React, {Component} from 'react';
 import { Button, Form, FormGroup, Input, Label } from 'reactstrap';
 
-class AuthForm extends React.Component {
+const Request = require('superagent');
+
+class AuthForm extends Component {
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      email: '',
+      password: '',
+      confirmarPassword: ''
+    }
+
+    this.login = this.login.bind(this);
+    this.register = this.register.bind(this);
+  }
+
   get isLogin() {
     return this.props.authState === STATE_LOGIN;
   }
@@ -18,19 +35,59 @@ class AuthForm extends React.Component {
     this.props.onChangeAuthState(authState);
   };
 
+  login() {
+    return Request
+    .post('https://protected-mountain-77919.herokuapp.com/api/login')
+    .set('Content-Type', 'application/x-www-form-urlencoded')
+    .send({email: this.state.email, password: this.state.password })
+    .then(res=>{
+      this.props.history.push('/dashboard');
+    })
+    .catch(err=>{
+    })
+  }
+
+  register() {
+    return Request
+    .post('https://protected-mountain-77919.herokuapp.com/api/signup')
+    .set('Content-Type', 'application/x-www-form-urlencoded')
+    .send({email: this.state.email, password: this.state.password })
+    .then(res=>{
+      this.login();
+    })
+    .catch(err=>{
+    })
+  }
+
+  handleChange = (e)=> {
+    this.setState({
+      [e.target.id]: e.target.value
+    }); 
+  }
+
   handleSubmit = event => {
     event.preventDefault();
-  };
+
+
+
+    if(this.props.authState === STATE_SIGNUP && this.state.password === this.state.confirmarPassword) {
+      this.register();
+    };
+
+    if(this.props.authState === STATE_LOGIN) {
+      this.login();
+    };
+  }; 
 
   renderButtonText() {
     const { buttonText } = this.props;
 
     if (!buttonText && this.isLogin) {
-      return 'Login';
+      return 'Iniciar sesión';
     }
 
     if (!buttonText && this.isSignup) {
-      return 'Signup';
+      return 'Registrarse';
     }
 
     return buttonText;
@@ -39,68 +96,69 @@ class AuthForm extends React.Component {
   render() {
     const {
       showLogo,
-      usernameLabel,
-      usernameInputProps,
+      emailLabel,
       passwordLabel,
-      passwordInputProps,
       confirmPasswordLabel,
-      confirmPasswordInputProps,
       children,
       onLogoClick,
     } = this.props;
 
     return (
-      <Form onSubmit={this.handleSubmit}>
+      <Form onSubmit={this.handleSubmit} className="col-md-12">
         {showLogo && (
           <div className="text-center pb-4">
             <img
-              src={logo200Image}
+              src={logocp}
               className="rounded"
-              style={{ width: 60, height: 60, cursor: 'pointer' }}
+              style={{cursor: 'pointer' }}
               alt="logo"
               onClick={onLogoClick}
             />
           </div>
         )}
         <FormGroup>
-          <Label for={usernameLabel}>{usernameLabel}</Label>
-          <Input {...usernameInputProps} />
+          <Label for={emailLabel}>{emailLabel}</Label>
+          <Input
+            type="email"
+            placeholder="email"
+            id="email"
+            onChange={this.handleChange}/>
         </FormGroup>
         <FormGroup>
           <Label for={passwordLabel}>{passwordLabel}</Label>
-          <Input {...passwordInputProps} />
+          <Input 
+            type="password"
+            placeholder="contraseña"
+            id="password"
+            onChange={this.handleChange}/>
         </FormGroup>
         {this.isSignup && (
           <FormGroup>
             <Label for={confirmPasswordLabel}>{confirmPasswordLabel}</Label>
-            <Input {...confirmPasswordInputProps} />
+            <Input
+              type="password"
+              placeholder="Confirmar contraseña"
+              id="confirmarPassword"
+              onChange={this.handleChange}/>
           </FormGroup>
         )}
-        <FormGroup check>
-          <Label check>
-            <Input type="checkbox" />{' '}
-            {this.isSignup ? 'Agree the terms and policy' : 'Remember me'}
-          </Label>
-        </FormGroup>
-        <hr />
         <Button
           size="lg"
-          className="bg-gradient-theme-left border-0"
+          className="bg-gradient-theme-left border-0 mt-5"
           block
           onClick={this.handleSubmit}>
           {this.renderButtonText()}
         </Button>
 
-        <div className="text-center pt-1">
-          <h6>or</h6>
+        <div className="text-center pt-3">
           <h6>
             {this.isSignup ? (
               <a href="#login" onClick={this.changeAuthState(STATE_LOGIN)}>
-                Login
+                Iniciar sesión
               </a>
             ) : (
               <a href="#signup" onClick={this.changeAuthState(STATE_SIGNUP)}>
-                Signup
+                Registrarse
               </a>
             )}
           </h6>
@@ -118,34 +176,19 @@ export const STATE_SIGNUP = 'SIGNUP';
 AuthForm.propTypes = {
   authState: PropTypes.oneOf([STATE_LOGIN, STATE_SIGNUP]).isRequired,
   showLogo: PropTypes.bool,
-  usernameLabel: PropTypes.string,
-  usernameInputProps: PropTypes.object,
+  emailLabel: PropTypes.string,
   passwordLabel: PropTypes.string,
-  passwordInputProps: PropTypes.object,
   confirmPasswordLabel: PropTypes.string,
-  confirmPasswordInputProps: PropTypes.object,
   onLogoClick: PropTypes.func,
 };
 
 AuthForm.defaultProps = {
   authState: 'LOGIN',
   showLogo: true,
-  usernameLabel: 'Email',
-  usernameInputProps: {
-    type: 'email',
-    placeholder: 'your@email.com',
-  },
-  passwordLabel: 'Password',
-  passwordInputProps: {
-    type: 'password',
-    placeholder: 'your password',
-  },
-  confirmPasswordLabel: 'Confirm Password',
-  confirmPasswordInputProps: {
-    type: 'password',
-    placeholder: 'confirm your password',
-  },
+  emailLabel: 'Email',
+  passwordLabel: 'Contraseña',
+  confirmPasswordLabel: 'Confirmar Contraseña',
   onLogoClick: () => {},
 };
 
-export default AuthForm;
+export default withRouter(AuthForm);

@@ -1,137 +1,352 @@
 import React from 'react';
+import {CardGroup, Row, Col} from 'reactstrap';
 
-import { getColor } from 'utils/colors';
-
-import {
-  Card,
-  CardBody,
-  CardHeader,
-  CardTitle,
-  CardGroup,
-  CardDeck,
-  Row,
-  Col,
-  ListGroup,
-  ListGroupItem,
-  Badge,
-  Button,
-} from 'reactstrap';
-
-import {
-  MdInsertChart,
-  MdBubbleChart,
-  MdPieChart,
-  MdShowChart,
-  MdPersonPin,
-  MdRateReview,
-  MdThumbUp,
-  MdShare,
-} from 'react-icons/lib/md';
-
-import InfiniteCalendar from 'react-infinite-calendar';
-
-import { Line, Bar } from 'react-chartjs-2';
-
-import {
-  supportTicketsData,
-  productsData,
-  userProgressTableData,
-  avatarsData,
-  todosData,
-  chartjs,
-} from 'demos/dashboardPage';
-import { getStackLineChart, stackLineChartOptions } from 'demos/chartjs';
-
+import {MdThumbUp} from 'react-icons/lib/md';
 import Page from 'components/Page';
-
-import SupportTicket from 'components/SupportTicket';
-import ProductMedia from 'components/ProductMedia';
-import UserProgressTable from 'components/UserProgressTable';
-
-import { AnnouncementCard, TodosCard } from 'components/Card';
-
+import DatatablePage from './TablePage';
 import { NumberWidget, IconWidget } from 'components/Widget';
+import {connect} from 'react-redux';
+import {getEntidad} from '../store/actions/entidadesActions';
 
-import MapWithBubbles from 'components/MapWithBubbles';
-import HorizontalAvatarList from 'components/HorizontalAvatarList';
-
-const today = new Date();
-const lastWeek = new Date(
-  today.getFullYear(),
-  today.getMonth(),
-  today.getDate() - 7
-);
+const API = 'https://protected-mountain-77919.herokuapp.com/api/';
+const ENTIDADES = [
+  'columbia',
+  'frances',
+  'galicia',
+  'icbc',
+  'nacion',
+  'patagonia',
+  'provincia',
+  'santander',
+  'supervielle',
+  'alpe',
+  'maguitur',
+  'maxinta',
+  'montevideo',
+  'vaccaro',
+]
 
 class DashboardPage extends React.Component {
-  componentDidMount() {
-    // this is needed, because InfiniteCalendar forces window scroll
-    window.scrollTo(0, 0);
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      entidades: {
+        columbia:{},
+        frances:{},
+        galicia:{},
+        icbc:{},
+        nacion:{},
+        patagonia:{},
+        provincia:{},
+        santander:{},
+        supervielle:{},
+        alpe:{},
+        maguitur:{},
+        maxinta:{},
+        montevideo:{},
+        vaccaro:{}
+      }
+    }
+
+    this.getCotizacionesNow = this.getCotizacionesNow.bind(this);
   }
 
-  render() {
-    const primaryColor = getColor('primary');
-    const secondaryColor = getColor('secondary');
+  componentDidMount() {
+    this.getCotizacionesNow();
+  }
 
+  cotizacionAltaCompraIconWidget(cotizacionParam) {
+    let dataResultado;
+    let resultado = 0;
+    
+    for(let i=0; i < ENTIDADES.length; i++) {
+      if (!cotizacionParam[i]) {
+        return;
+      }
+      if(parseFloat(cotizacionParam[i].compra).toFixed(2) > resultado) {
+        resultado = parseFloat(cotizacionParam[i].compra).toFixed(2);
+        dataResultado=cotizacionParam[i];
+      }
+    }
+    let logo = dataResultado.entidad === 'Montevideo' ||  dataResultado.entidad === 'Vaccaro' ? '' : dataResultado.logo;
+    return (
+      <IconWidget
+        bgColor="white"
+        inverse={false}
+        icon={MdThumbUp}
+        subtitle="Mayor precio de compra"
+        entidad={dataResultado.entidad}
+        valor={`$ ${dataResultado.compra}`}
+        logo={logo}
+      />
+    );
+  }
+  
+  cotizacionBajaCompraIconWidget(cotizacionParam) {
+    if (!cotizacionParam[0]) {
+      return;
+    }
+    let dataResultado;
+    let resultado = parseFloat(cotizacionParam[0].compra).toFixed(2);
+    
+    for(let i=0; i < ENTIDADES.length; i++) {
+      if (!cotizacionParam[i]) {
+        return;
+      }
+      if(parseFloat(cotizacionParam[i].compra).toFixed(2) <= resultado) {
+        resultado = parseFloat(cotizacionParam[i].compra).toFixed(2)
+        dataResultado = cotizacionParam[i];
+      }
+    }
+    let logo = dataResultado.entidad === 'Montevideo' ||  dataResultado.entidad === 'Vaccaro' ? '' : dataResultado.logo;
+    return (
+      <IconWidget
+        bgColor="white"
+        inverse={false}
+        icon={MdThumbUp}
+        subtitle="Menor precio de compra"
+        entidad={dataResultado.entidad}
+        valor={`$ ${dataResultado.compra}`}
+        logo={logo}
+      />
+    );
+  }
+
+  cotizacionAltaVentaIconWidget(cotizacionParam) {
+    let dataResultado;
+    let resultado = 0;
+    
+    for(let i=0; i < ENTIDADES.length; i++) {
+      if (!cotizacionParam[i]) {
+        return;
+      }
+      if(parseFloat(cotizacionParam[i].venta).toFixed(2) > resultado) {
+        resultado = parseFloat(cotizacionParam[i].venta).toFixed(2);
+        dataResultado=cotizacionParam[i];
+      }
+    }
+    let logo = dataResultado.entidad === 'Montevideo' ||  dataResultado.entidad === 'Vaccaro' ? '' : dataResultado.logo;
+    return (
+      <IconWidget
+        bgColor="white"
+        inverse={false}
+        icon={MdThumbUp}
+        subtitle="Mayor precio de venta"
+        entidad={dataResultado.entidad}
+        valor={`$ ${dataResultado.venta}`}
+        logo={logo}
+      />
+    );
+  }
+
+  cotizacionBajaVentaIconWidget(cotizacionParam) {
+    if (!cotizacionParam[0]) {
+      return;
+    }
+    let dataResultado;
+    let resultado = parseFloat(cotizacionParam[0].venta).toFixed(2);
+    
+    for(let i=0; i < ENTIDADES.length; i++) {
+      if (!cotizacionParam[i]) {
+        return;
+      }
+      if(parseFloat(cotizacionParam[i].venta).toFixed(2) <= resultado) {
+        resultado = parseFloat(cotizacionParam[i].venta).toFixed(2)
+        dataResultado = cotizacionParam[i];
+      }
+    }
+    let logo = dataResultado.entidad === 'Montevideo' ||  dataResultado.entidad === 'Vaccaro' ? '' : dataResultado.logo;
+    return (
+      <IconWidget
+        bgColor="white"
+        inverse={false}
+        icon={MdThumbUp}
+        subtitle="Menor precio de venta"
+        entidad={dataResultado.entidad}
+        valor={`$ ${dataResultado.venta}`}
+        logo={logo}
+      />
+    );
+  }
+
+  cotizacionMayorSpreadIconWidget(cotizacionParam) {
+    if (!cotizacionParam[0]) {
+      return;
+    }
+    let dataResultado;
+    let resultadoCompra;
+    let resultadoVenta;
+    let resultado = 0;
+    let resultadoTemp;
+
+    
+    for(let i=0; i < ENTIDADES.length; i++) {
+      if (!cotizacionParam[i]) {
+        return;
+      }
+      
+      resultadoCompra = parseFloat(cotizacionParam[0].compra);
+      resultadoVenta = parseFloat(cotizacionParam[0].venta);
+      resultadoTemp = resultadoVenta - resultadoCompra;
+      if(resultadoTemp > resultado) {
+        resultado = resultadoTemp.toFixed(2);
+        dataResultado = cotizacionParam[i];
+      }
+    }
+    let logo = dataResultado.entidad === 'Montevideo' ||  dataResultado.entidad === 'Vaccaro' ? '' : dataResultado.logo;
+    return (
+      <IconWidget
+        bgColor="white"
+        inverse={false}
+        icon={MdThumbUp}
+        subtitle="Mayor spread entre precios"
+        entidad={dataResultado.entidad}
+        valor={`$ ${resultado}`}
+        logo={logo}
+      />
+    );
+  }
+
+  cotizacionMenorSpreadIconWidget(cotizacionParam) {
+    if (!cotizacionParam[0]) {
+      return;
+    }
+    let dataResultado;
+    let resultadoCompra;
+    let resultadoVenta;
+    let resultado = parseFloat(cotizacionParam[0].venta).toFixed(2) - parseFloat(cotizacionParam[0].compra);
+
+    for(let i=0; i < ENTIDADES.length; i++) {
+      if (!cotizacionParam[i]) {
+        return;
+      }
+      
+      resultadoCompra = parseFloat(cotizacionParam[i].compra);
+      resultadoVenta = parseFloat(cotizacionParam[i].venta);
+      let resultadoTemp = resultadoVenta - resultadoCompra;
+
+      if(resultadoTemp <= resultado) {
+        resultado = resultadoTemp;
+        dataResultado = cotizacionParam[i];
+      }
+    }
+    let logo = dataResultado.entidad === 'Montevideo' ||  dataResultado.entidad === 'Vaccaro' ? '' : dataResultado.logo;
+    return (
+      <IconWidget
+        bgColor="white"
+        inverse={false}
+        icon={MdThumbUp}
+        subtitle="Menor spread entre precios"
+        entidad={dataResultado.entidad}
+        valor={`$ ${resultado.toFixed(2)}`}
+        logo={logo}
+      />
+    );
+  }
+
+  getDataTable(cotizacionParam) {
+    return (
+      <Col lg="12" md="12" sm="12" xs="12">
+        <DatatablePage rowData={cotizacionParam}/>
+      </Col>
+    );
+  }
+
+  async getCotizacionesNow() {
+    Promise.all(ENTIDADES.map((entidades)=>{
+      fetch(API + entidades)
+      .then(response => {
+        return response.json();
+      })
+      .then((data) => {
+        data = data.slice(0, 5);
+        for(let i=0; i<data.length; i++) {
+          data[i].logo = `/entidades/${entidades}.png`;
+        }
+        return this.setState(prevState => ({
+          entidades: {
+            ...prevState.entidades,
+            [entidades]: {
+              data
+            }
+          }
+        }));
+      })
+      .catch(error => console.log(error));
+    }
+    ))
+  };
+
+  render() {
+    console.log(this.props);
+    let cotizacionParam = [];
+
+    let cotizacionWidget = ENTIDADES.map((data, i)=>{
+      if (!this.state.entidades[data].data) {
+        return;
+      }
+      let item = this.state.entidades[data].data[0];
+      cotizacionParam.push(item);
+      let logo = item.entidad === 'Montevideo' ||  item.entidad === 'Vaccaro' ? '' : item.logo;
+      let barColorCompra = item.compra >= this.state.entidades[data].data[1].compra ? 'success' : 'danger';
+      let barColorVenta = item.venta >= this.state.entidades[data].data[1].venta ? 'success' : 'danger';
+      let porcentajeCompra = (((item.compra/this.state.entidades[data].data[1].compra)*100)-100).toFixed(2);
+      let porcentajeVenta = (((item.venta/this.state.entidades[data].data[1].venta)*100)-100).toFixed(2);
+      let spread = item.venta - item.compra;
+
+      return (<Col key={i} lg={6} md={6} sm={12} xs={12}>
+        <NumberWidget
+          title={item.entidad}
+          subtitle={`${item.dia} ${item.hora}`}
+          spread={spread}
+          compra={item.compra}
+          anteriorCompra = {this.state.entidades[data].data[1].compra}
+          venta={item.venta}
+          anteriorVenta = {this.state.entidades[data].data[1].venta}
+          logo = {logo}
+          colorCompra = {barColorCompra}
+          colorVenta = {barColorVenta}
+          modificacionCompra = {porcentajeCompra}
+          modificacionVenta = {porcentajeVenta}
+          progress={{
+            label: 'Porcentaje de variacion',
+          }}
+        />
+      </Col>);
+    })
     return (
       <Page
         className="DashboardPage"
-        title="Dashboard"
-        breadcrumbs={[{ name: 'Dashboard', active: true }]}>
+        title="Panel de control"
+        style={{ marginBottom: '2rem', marginTop: '2rem' }}>
         <Row>
-          <Col lg={3} md={6} sm={6} xs={12}>
-            <NumberWidget
-              title="Total Profit"
-              subtitle="This month"
-              number="9.8k"
-              color="secondary"
-              progress={{
-                value: 75,
-                label: 'Last month',
-              }}
-            />
-          </Col>
-
-          <Col lg={3} md={6} sm={6} xs={12}>
-            <NumberWidget
-              title="Monthly Visitors"
-              subtitle="This month"
-              number="5,400"
-              color="secondary"
-              progress={{
-                value: 45,
-                label: 'Last month',
-              }}
-            />
-          </Col>
-
-          <Col lg={3} md={6} sm={6} xs={12}>
-            <NumberWidget
-              title="New Users"
-              subtitle="This month"
-              number="3,400"
-              color="secondary"
-              progress={{
-                value: 90,
-                label: 'Last month',
-              }}
-            />
-          </Col>
-
-          <Col lg={3} md={6} sm={6} xs={12}>
-            <NumberWidget
-              title="Bounce Rate"
-              subtitle="This month"
-              number="38%"
-              color="secondary"
-              progress={{
-                value: 60,
-                label: 'Last month',
-              }}
-            />
+          <Col lg="12" md="12" sm="12" xs="12">
+          <CardGroup style={ {marginTop: '2rem' }}
+          lg={3} md={3} sm={12} xs={12}>
+            {this.cotizacionAltaCompraIconWidget(cotizacionParam)}
+            {this.cotizacionAltaVentaIconWidget(cotizacionParam)}
+            {this.cotizacionMayorSpreadIconWidget(cotizacionParam)}
+          </CardGroup>
+          <CardGroup style={ { marginBottom: '2rem'}}
+          lg={3} md={3} sm={12} xs={12}>
+            {this.cotizacionBajaCompraIconWidget(cotizacionParam)}
+            {this.cotizacionBajaVentaIconWidget(cotizacionParam)}
+            {this.cotizacionMenorSpreadIconWidget(cotizacionParam)}
+          </CardGroup>
           </Col>
         </Row>
 
         <Row>
+          {cotizacionWidget}
+        </Row>
+
+        <Row style={{ marginBottom: '2rem', marginTop: '2rem' }}>
+          {this.getDataTable(cotizacionParam)}
+        </Row>
+
+        {/* <Row>
           <Col lg="8" md="12" sm="12" xs="12">
             <Card>
               <CardHeader>
@@ -170,33 +385,9 @@ class DashboardPage extends React.Component {
               </ListGroup>
             </Card>
           </Col>
-        </Row>
+        </Row> */}
 
-        <CardGroup style={{ marginBottom: '1rem' }}>
-          <IconWidget
-            bgColor="white"
-            inverse={false}
-            icon={MdThumbUp}
-            title="50+ Likes"
-            subtitle="People you like"
-          />
-          <IconWidget
-            bgColor="white"
-            inverse={false}
-            icon={MdRateReview}
-            title="10+ Reviews"
-            subtitle="New Reviews"
-          />
-          <IconWidget
-            bgColor="white"
-            inverse={false}
-            icon={MdShare}
-            title="30+ Shares"
-            subtitle="New Shares"
-          />
-        </CardGroup>
-
-        <Row>
+        {/* <Row>
           <Col md="6" sm="12" xs="12">
             <Card>
               <CardHeader>New Products</CardHeader>
@@ -233,9 +424,9 @@ class DashboardPage extends React.Component {
               </CardBody>
             </Card>
           </Col>
-        </Row>
+        </Row> */}
 
-        <Row>
+        {/* <Row>
           <Col lg={4} md={4} sm={12} xs={12}>
             <Card>
               <Line
@@ -315,9 +506,9 @@ class DashboardPage extends React.Component {
               </CardBody>
             </Card>
           </Col>
-        </Row>
+        </Row> */}
 
-        <Row>
+        {/* <Row>
           <Col lg="4" md="12" sm="12" xs="12">
             <InfiniteCalendar
               selected={today}
@@ -352,9 +543,9 @@ class DashboardPage extends React.Component {
               </CardBody>
             </Card>
           </Col>
-        </Row>
+        </Row> */}
 
-        <CardDeck style={{ marginBottom: '1rem' }}>
+        {/* <CardDeck style={{ marginBottom: '1rem' }}>
           <Card body style={{ overflowX: 'auto' }}>
             <HorizontalAvatarList
               avatars={avatarsData}
@@ -369,9 +560,9 @@ class DashboardPage extends React.Component {
               reversed
             />
           </Card>
-        </CardDeck>
+        </CardDeck> */}
 
-        <Row>
+        {/* <Row>
           <Col lg="4" md="12" sm="12" xs="12">
             <AnnouncementCard
               color="gradient-secondary"
@@ -408,9 +599,30 @@ class DashboardPage extends React.Component {
           <Col lg="4" md="12" sm="12" xs="12">
             <TodosCard todos={todosData} />
           </Col>
-        </Row>
+        </Row> */}
       </Page>
     );
   }
 }
-export default DashboardPage;
+
+const mapStatetoProps = (state) => {
+  return {
+    columbia: state.entidades.columbia,
+    frances: state.entidades.frances,
+    galicia: state.entidades.galicia,
+    icbc: state.entidades.icbc,
+    nacion: state.entidades.nacion,
+    patagonia: state.entidades.patagonia,
+    provincia: state.entidades.provincia,
+    santander: state.entidades.santander,
+    supervielle: state.entidades.supervielle,
+    alpe: state.entidades.alpe,
+    maguitur: state.entidades.maguitur,
+    maxinta: state.entidades.maxinta,
+    montevideo: state.entidades.montevideo,
+    vaccaro: state.entidades.vaccaro
+
+  }
+}
+
+export default connect(mapStatetoProps)(DashboardPage);
