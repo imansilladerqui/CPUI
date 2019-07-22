@@ -7,6 +7,7 @@ import DatatablePage from './TablePage';
 import { NumberWidget, IconWidget } from 'components/Widget';
 import {connect} from 'react-redux';
 import {getEntidad} from '../store/actions/entidadesActions';
+import {getUser} from '../store/actions/userActions';
 
 const API = 'https://protected-mountain-77919.herokuapp.com/api/';
 const ENTIDADES = [
@@ -607,21 +608,8 @@ class DashboardPage extends React.Component {
 
 const mapStatetoProps = (state) => {
   return {
-    columbia: state.entidades.columbia,
-    frances: state.entidades.frances,
-    galicia: state.entidades.galicia,
-    icbc: state.entidades.icbc,
-    nacion: state.entidades.nacion,
-    patagonia: state.entidades.patagonia,
-    provincia: state.entidades.provincia,
-    santander: state.entidades.santander,
-    supervielle: state.entidades.supervielle,
-    alpe: state.entidades.alpe,
-    maguitur: state.entidades.maguitur,
-    maxinta: state.entidades.maxinta,
-    montevideo: state.entidades.montevideo,
-    vaccaro: state.entidades.vaccaro
-
+    user: state.user.user,
+    entidades: state.entidades.entidades
   }
 }
 

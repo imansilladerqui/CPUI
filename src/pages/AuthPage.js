@@ -1,6 +1,9 @@
 import AuthForm, { STATE_LOGIN } from 'components/AuthForm';
+import {connect} from 'react-redux';
+import Preloader from '../common/preloader/Preloader';
 import React from 'react';
-import { Card, Col, Row } from 'reactstrap';
+import { Card, Col, Row} from 'reactstrap';
+
 
 class AuthPage extends React.Component {
   handleAuthState = authState => {
@@ -16,25 +19,41 @@ class AuthPage extends React.Component {
   };
 
   render() {
+    let showPreloader;
+
+    if (this.props.showPreloader) {
+      showPreloader = <Preloader/>;
+    }
+
     return (
-      <Row
+      <div>
+        {showPreloader}
+        <Row
         style={{
           height: '100vh',
           justifyContent: 'center',
           alignItems: 'center',
         }}>
-        <Col md={6} lg={4}>
-          <Card body>
-            <AuthForm
-              authState={this.props.authState}
-              onChangeAuthState={this.handleAuthState}
-              onLogoClick={this.handleLogoClick}
-            />
-          </Card>
-        </Col>
-      </Row>
+          <Col md={6} lg={4}>
+            <Card body>
+              <AuthForm
+                authState={this.props.authState}
+                onChangeAuthState={this.handleAuthState}
+                onLogoClick={this.handleLogoClick}
+              />
+            </Card>
+          </Col>
+        </Row>
+      </div>
+     
     );
   }
 }
 
-export default AuthPage;
+const mapStateToProps = (state) => {
+  return {
+    showPreloader: state.auth.showPreloader
+  }
+}
+
+export default connect(mapStateToProps)(AuthPage);

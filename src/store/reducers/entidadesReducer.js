@@ -1,18 +1,5 @@
 const initState = {
-    columbia:[],
-    frances:[],
-    galicia:[],
-    icbc:[],
-    nacion:[],
-    patagonia:[],
-    provincia:[],
-    santander:[],
-    supervielle:[],
-    alpe:[],
-    maguitur:[],
-    maxinta:[],
-    montevideo:[],
-    vaccaro:[]
+    entidades:[]
 }
 
 

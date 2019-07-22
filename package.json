@@ -4,7 +4,7 @@
   "private": false,
   "homepage": "https://cambioposadas-d69c9.firebaseapp.com",
   "dependencies": {
-    "bootstrap": "4.1.1",
+    "bootstrap": "4.3.1",
     "chart.js": "^2.7.2",
     "classnames": "^2.2.6",
     "d3-geo": "^1.10.0",
@@ -26,7 +26,7 @@
     "react-simple-maps": "^0.12.1",
     "react-sizeme": "^2.5.2",
     "react-transition-group": "^2.3.1",
-    "reactstrap": "^6.1.0",
+    "reactstrap": "7.1.0",
     "redux": "^4.0.4",
     "redux-thunk": "^2.3.0",
     "superagent": "^5.1.0",

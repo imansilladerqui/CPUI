@@ -1,10 +1,12 @@
+import {Button, Form, FormGroup, Input, Label, UncontrolledAlert} from 'reactstrap';
+import {connect} from 'react-redux';
+import {loginUser, clearState, signUp} from '../store/actions/authActions';
 import logocp from 'assets/img/logo/cplogo.svg';
 import PropTypes from 'prop-types';
-import {withRouter} from 'react-router';
 import React, {Component} from 'react';
-import { Button, Form, FormGroup, Input, Label } from 'reactstrap';
+import {Redirect} from 'react-router-dom';
+import {withRouter} from 'react-router';
 
-const Request = require('superagent');
 
 class AuthForm extends Component {
 
@@ -14,11 +16,14 @@ class AuthForm extends Component {
     this.state = {
       email: '',
       password: '',
-      confirmarPassword: ''
+      confirmarPassword: '',
+      errors: {
+        email: '',
+        emailCambioPosadas: '',
+        password: '',
+        confirmarPassword: ''
+      }
     }
-
-    this.login = this.login.bind(this);
-    this.register = this.register.bind(this);
   }
 
   get isLogin() {
@@ -31,51 +36,81 @@ class AuthForm extends Component {
 
   changeAuthState = authState => event => {
     event.preventDefault();
-
+    this.props.clearState();
     this.props.onChangeAuthState(authState);
   };
 
-  login() {
-    return Request
-    .post('https://protected-mountain-77919.herokuapp.com/api/login')
-    .set('Content-Type', 'application/x-www-form-urlencoded')
-    .send({email: this.state.email, password: this.state.password })
-    .then(res=>{
-      this.props.history.push('/dashboard');
-    })
-    .catch(err=>{
-    })
-  }
-
-  register() {
-    return Request
-    .post('https://protected-mountain-77919.herokuapp.com/api/signup')
-    .set('Content-Type', 'application/x-www-form-urlencoded')
-    .send({email: this.state.email, password: this.state.password })
-    .then(res=>{
-      this.login();
-    })
-    .catch(err=>{
-    })
-  }
-
   handleChange = (e)=> {
+    const validEmailRegex = 
+    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
     this.setState({
       [e.target.id]: e.target.value
-    }); 
+    });
+
+    let errors = this.state.errors;
+
+    if(this.props.authState === STATE_SIGNUP) {
+      switch (e.target.id) {
+        case 'email':
+          let emailCambioPosadas = e.target.value.split('@');
+          errors.email = 
+          validEmailRegex.test(e.target.value)
+              ? ''
+              : 'Email no es valido!';
+
+          errors.emailCambioPosadas = 
+          emailCambioPosadas[1] === 'cambioposadas.com.ar' 
+              ? ''
+              : 'Este no es un mail de Cambio Posadas';
+          break;
+        case 'password': 
+          errors.password = 
+            e.target.value.length < 8
+              ? 'La contraseña debe tener al menos 8 caracteres'
+              : '';
+          break;
+        case 'confirmarPassword':
+          errors.confirmarPassword = 
+            (e.target.value !== this.state.password)
+              ? 'No coinciden las contraseñas'
+              : '';
+          break;
+        default:
+          break;
+      }
+
+      this.setState({errors, [e.target.id]: e.target.value});
+    }
   }
 
   handleSubmit = event => {
     event.preventDefault();
 
+    let errors = this.state.errors;
 
-
-    if(this.props.authState === STATE_SIGNUP && this.state.password === this.state.confirmarPassword) {
-      this.register();
+    if(this.props.authState === STATE_SIGNUP) {
+      switch (event.target.id) {
+        case 'email':
+          errors.email = 
+          event.target.value.length > 0
+              ? ''
+              : 'El campo email no puede quedar vacio!';
+          break;
+        case 'password': 
+          errors.password = 
+          event.target.value.length > 0
+              ? ''
+              : 'El campo contraseña no puede quedar vacio!';
+          break;
+        default:
+          break;
+      }
+      this.props.signUp(this.state);
     };
 
     if(this.props.authState === STATE_LOGIN) {
-      this.login();
+      this.props.signIn(this.state);
     };
   }; 
 
@@ -94,11 +129,26 @@ class AuthForm extends Component {
   }
 
   render() {
+    let loginError, showPreloader;
+
+    if(this.props.successLogin) {
+      return <Redirect to="/dashboard" />
+    }
+
+    if(this.props.authState === STATE_SIGNUP) {
+      loginError = (<UncontrolledAlert color="secondary"> 
+        Solo empleados de CAMBIO POSADAS pueden registrarse.
+      </UncontrolledAlert>);
+  }
+
+    if(this.props.showError) {
+        loginError = (<UncontrolledAlert color="secondary"> 
+         Email y/o contraseña incorrecta! 
+        </UncontrolledAlert>);
+    }
+
     const {
       showLogo,
-      emailLabel,
-      passwordLabel,
-      confirmPasswordLabel,
       children,
       onLogoClick,
     } = this.props;
@@ -116,30 +166,47 @@ class AuthForm extends Component {
             />
           </div>
         )}
+        {showPreloader}
+        {loginError}
         <FormGroup>
-          <Label for={emailLabel}>{emailLabel}</Label>
+          <Label>Email</Label>
           <Input
+            className={(this.state.email && !this.state.errors.email && !this.state.errors.emailCambioPosadas &&this.props.authState === STATE_SIGNUP) ? "is-valid form-control" : ""}
             type="email"
             placeholder="email"
             id="email"
             onChange={this.handleChange}/>
+          <div className='info'>
+            <small className="text-danger">{this.state.errors.email}</small>
+          </div>
+          <div className='info'>
+            <small className="text-danger">{this.state.errors.emailCambioPosadas}</small>
+          </div>
         </FormGroup>
         <FormGroup>
-          <Label for={passwordLabel}>{passwordLabel}</Label>
-          <Input 
+          <Label>Contraseña</Label>
+          <Input
+            className={(this.state.password && !this.state.errors.password && this.props.authState === STATE_SIGNUP) ? "is-valid form-control" : ""} 
             type="password"
             placeholder="contraseña"
             id="password"
             onChange={this.handleChange}/>
+          <div className='info'>
+            <small className="text-danger">{this.state.errors.password}</small>
+          </div>
         </FormGroup>
         {this.isSignup && (
           <FormGroup>
-            <Label for={confirmPasswordLabel}>{confirmPasswordLabel}</Label>
+            <Label>Confirmar Contraseña</Label>
             <Input
+              className={(!this.state.errors.confirmarPassword && this.state.confirmarPassword && this.props.authState === STATE_SIGNUP) ? "is-valid form-control" : ""}
               type="password"
               placeholder="Confirmar contraseña"
               id="confirmarPassword"
               onChange={this.handleChange}/>
+            <div className='info'>
+              <small className="text-danger">{this.state.errors.confirmarPassword}</small>
+            </div>
           </FormGroup>
         )}
         <Button
@@ -176,19 +243,29 @@ export const STATE_SIGNUP = 'SIGNUP';
 AuthForm.propTypes = {
   authState: PropTypes.oneOf([STATE_LOGIN, STATE_SIGNUP]).isRequired,
   showLogo: PropTypes.bool,
-  emailLabel: PropTypes.string,
-  passwordLabel: PropTypes.string,
-  confirmPasswordLabel: PropTypes.string,
   onLogoClick: PropTypes.func,
 };
 
 AuthForm.defaultProps = {
   authState: 'LOGIN',
   showLogo: true,
-  emailLabel: 'Email',
-  passwordLabel: 'Contraseña',
-  confirmPasswordLabel: 'Confirmar Contraseña',
   onLogoClick: () => {},
 };
 
-export default withRouter(AuthForm);
+const mapStateToProps = (state) => {
+  return {
+    showError: state.auth.showError,
+    successLogin: state.auth.successLogin,
+    showPreloader: state.auth.showPreloader
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    signIn: (creds) => dispatch(loginUser(creds)),
+    clearState: () => dispatch(clearState()),
+    signUp: (creds) => dispatch(signUp(creds))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(AuthForm));
