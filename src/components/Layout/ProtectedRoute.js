@@ -5,6 +5,7 @@ const ProtectedRoute = ({ component: Component, layout: Layout, ...rest }) => (
   <Route
     {...rest}
     render={props => {
+        console.log(localStorage.getItem('_token'));
         if (localStorage.getItem('_token')) {
             return <Layout>
                 <Component {...props} />

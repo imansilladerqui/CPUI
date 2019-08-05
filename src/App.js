@@ -24,14 +24,14 @@ import componentQueries from 'react-component-queries';
 import {BrowserRouter, Redirect, Switch} from 'react-router-dom';
 import './styles/reduction.css';
 
-const getBasename = () => {
-  return `/${process.env.PUBLIC_URL.split('/').pop()}`;
-};
+// const getBasename = () => {
+//   return `/${process.env.PUBLIC_URL.split('/').pop()}`;
+// };
 
 class App extends React.Component {
   render() {
     return (
-      <BrowserRouter basename={getBasename()}>
+      <BrowserRouter /*basename={getBasename()}*/>
         <GAListener>
           <Switch>
             <LayoutRoute
