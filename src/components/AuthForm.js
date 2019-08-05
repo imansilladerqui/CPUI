@@ -5,7 +5,6 @@ import logocp from 'assets/img/logo/cplogo.svg';
 import PropTypes from 'prop-types';
 import React, {Component} from 'react';
 import {Redirect} from 'react-router-dom';
-import {withRouter} from 'react-router';
 
 
 class AuthForm extends Component {
@@ -276,4 +275,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AuthForm));
+export default connect(mapStateToProps, mapDispatchToProps)(AuthForm);
