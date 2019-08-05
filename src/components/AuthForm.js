@@ -129,9 +129,15 @@ class AuthForm extends Component {
   }
 
   render() {
-    let loginError, showPreloader;
+    let loginError, showPreloader, tokenExpired;
 
-    if(this.props.successLogin) {
+    if(this.props.tokenExpired) {
+      tokenExpired = (<UncontrolledAlert color="secondary"> 
+        Tu sesión se venció, ingresa nuevamente.
+      </UncontrolledAlert>)
+    }
+
+    if(this.props.successLogin && !this.props.tokenExpired) {
       return <Redirect to="/dashboard" />
     }
 
@@ -168,6 +174,7 @@ class AuthForm extends Component {
         )}
         {showPreloader}
         {loginError}
+        {tokenExpired}
         <FormGroup>
           <Label>Email</Label>
           <Input
@@ -256,7 +263,8 @@ const mapStateToProps = (state) => {
   return {
     showError: state.auth.showError,
     successLogin: state.auth.successLogin,
-    showPreloader: state.auth.showPreloader
+    showPreloader: state.auth.showPreloader,
+    tokenExpired: state.dashboard.tokenExpired
   }
 }
 

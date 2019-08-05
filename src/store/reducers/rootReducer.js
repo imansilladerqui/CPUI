@@ -1,12 +1,10 @@
-import userReducer from './userReducer';
-import entidadesReducer from './entidadesReducer';
+import dashboardReducer from './dashboardReducer';
 import AuthReducer from './authReducer';
 import {combineReducers} from 'redux';
 
 const rootReducer = combineReducers({
     auth: AuthReducer,
-    user: userReducer,
-    entidades: entidadesReducer
+    dashboard: dashboardReducer,
 });
 
 export default rootReducer;

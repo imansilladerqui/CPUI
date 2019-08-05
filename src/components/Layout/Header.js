@@ -1,39 +1,17 @@
-import React from 'react';
-
-import bn from 'utils/bemnames';
-
-import {
-  Navbar,
-  // NavbarToggler,
-  Nav,
-  NavItem,
-  NavLink,
-  Popover,
-  PopoverBody,
-  ListGroup,
-  ListGroupItem,
-  Button,
-} from 'reactstrap';
-
-import {
-  MdNotificationsActive,
-  MdNotificationsNone,
-  MdInsertChart,
-  MdPersonPin,
-  MdMessage,
-  MdSettingsApplications,
-  MdHelp,
-  MdClearAll,
-  MdExitToApp,
-} from 'react-icons/lib/md';
 
 import Avatar from 'components/Avatar';
-import { UserCard } from 'components/Card';
+import bn from 'utils/bemnames';
+import {connect} from 'react-redux';
+import {getUser} from '../../store/actions/dashboardActions';
+import {MdNotificationsActive, MdNotificationsNone, MdInsertChart, MdPersonPin, MdMessage, MdSettingsApplications, MdHelp, MdClearAll, MdExitToApp} from 'react-icons/lib/md';
+import {Navbar, Nav, NavItem, NavLink, Popover, PopoverBody, ListGroup, ListGroupItem, Button} from 'reactstrap';
+import {notificationsData} from 'demos/header';
 import Notifications from 'components/Notifications';
-
+import React from 'react';
+import {UserCard} from 'components/Card';
 import withBadge from 'hocs/withBadge';
 
-import { notificationsData } from 'demos/header';
+
 
 const bem = bn.create('header');
 
@@ -56,6 +34,10 @@ class Header extends React.Component {
     isNotificationConfirmed: false,
     isOpenUserCardPopover: false,
   };
+
+  componentDidMount() {
+    this.props.getUser();
+  }
 
   toggleNotificationPopover = () => {
     this.setState({
@@ -80,8 +62,13 @@ class Header extends React.Component {
     document.querySelector('.cr-sidebar').classList.toggle('cr-sidebar--open');
   };
 
+  handleLogOut() {
+    localStorage.removeItem('_token');
+    window.location.reload();
+  }
+
   render() {
-    const { isNotificationConfirmed } = this.state;
+    const {isNotificationConfirmed} = this.state;
 
     return (
       <Navbar light expand className={bem.b('bg-white')}>
@@ -135,15 +122,15 @@ class Header extends React.Component {
               style={{ minWidth: 250 }}>
               <PopoverBody className="p-0 border-light">
                 <UserCard
-                  title="Jane"
-                  subtitle="jane@jane.com"
-                  text="Last updated 3 mins ago"
+                  title={this.props.name || 'Name'}
+                  subtitle={this.props.user.email}
+                  text={`Last updated: ${this.props.user.updated_at}`}
                   className="border-light">
                   <ListGroup flush>
                     <ListGroupItem tag="button" action className="border-light">
                       <MdPersonPin /> Profile
                     </ListGroupItem>
-                    <ListGroupItem tag="button" action className="border-light">
+                    {/* <ListGroupItem tag="button" action className="border-light">
                       <MdInsertChart /> Stats
                     </ListGroupItem>
                     <ListGroupItem tag="button" action className="border-light">
@@ -154,8 +141,8 @@ class Header extends React.Component {
                     </ListGroupItem>
                     <ListGroupItem tag="button" action className="border-light">
                       <MdHelp /> Help
-                    </ListGroupItem>
-                    <ListGroupItem tag="button" action className="border-light">
+                    </ListGroupItem> */}
+                    <ListGroupItem tag="button" action onClick={this.handleLogOut} className="border-light">
                       <MdExitToApp /> Signout
                     </ListGroupItem>
                   </ListGroup>
@@ -169,4 +156,16 @@ class Header extends React.Component {
   }
 }
 
-export default Header;
+const mapStatetoProps = (state) => {
+  return {
+    user: state.dashboard.user
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getUser: () => dispatch(getUser())
+  }
+}
+
+export default connect(mapStatetoProps, mapDispatchToProps)(Header);

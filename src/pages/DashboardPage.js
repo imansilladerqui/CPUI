@@ -1,16 +1,13 @@
-import React from 'react';
-import {CardGroup, Row, Col} from 'reactstrap';
 
-import {MdThumbUp} from 'react-icons/lib/md';
-import Page from 'components/Page';
-import DatatablePage from './TablePage';
-import { NumberWidget, IconWidget } from 'components/Widget';
+// import {Row, Col} from 'reactstrap';
 import {connect} from 'react-redux';
-import {getEntidad} from '../store/actions/entidadesActions';
-import {getUser} from '../store/actions/userActions';
+import {getEntidades, getEntidadesHistorico} from '../store/actions/dashboardActions';
+import {NumberCotizaciones, IconsCotizaciones} from 'components/Widget';
+import Page from 'components/Page';
+import React from 'react';
+import {Redirect} from 'react-router-dom';
 
-const API = 'https://protected-mountain-77919.herokuapp.com/api/';
-const ENTIDADES = [
+const entidadesList = [
   'columbia',
   'frances',
   'galicia',
@@ -27,325 +24,66 @@ const ENTIDADES = [
   'vaccaro',
 ]
 
+
 class DashboardPage extends React.Component {
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      entidades: {
-        columbia:{},
-        frances:{},
-        galicia:{},
-        icbc:{},
-        nacion:{},
-        patagonia:{},
-        provincia:{},
-        santander:{},
-        supervielle:{},
-        alpe:{},
-        maguitur:{},
-        maxinta:{},
-        montevideo:{},
-        vaccaro:{}
-      }
-    }
-
-    this.getCotizacionesNow = this.getCotizacionesNow.bind(this);
-  }
-
   componentDidMount() {
-    this.getCotizacionesNow();
+    this.props.getEntidades();
+    for(let i=0; i < entidadesList.length; i++) {
+      this.props.getEntidadesHistorico(entidadesList[i]);
+    }
   }
 
-  cotizacionAltaCompraIconWidget(cotizacionParam) {
-    let dataResultado;
-    let resultado = 0;
-    
-    for(let i=0; i < ENTIDADES.length; i++) {
-      if (!cotizacionParam[i]) {
-        return;
-      }
-      if(parseFloat(cotizacionParam[i].compra).toFixed(2) > resultado) {
-        resultado = parseFloat(cotizacionParam[i].compra).toFixed(2);
-        dataResultado=cotizacionParam[i];
-      }
+  shouldComponentUpdate(nextProps, nextState) {
+    if (this.props.entidades !== nextProps.entidades ||
+        this.props.alpe !== nextProps.alpe ||
+        this.props.columbia !== nextProps.columbia ||
+        this.props.frances !== nextProps.frances ||
+        this.props.galicia !== nextProps.galicia ||
+        this.props.icbc !== nextProps.icbc ||
+        this.props.maguitur !== nextProps.maguitur ||
+        this.props.maxinta !== nextProps.maxinta ||
+        this.props.montevideo !== nextProps.montevideo ||
+        this.props.nacion !== nextProps.nacion ||
+        this.props.patagonia !== nextProps.patagonia ||
+        this.props.provincia !== nextProps.provincia ||
+        this.props.santander !== nextProps.santander ||
+        this.props.supervielle !== nextProps.supervielle ||
+        this.props.tokenExpired !== nextProps.tokenExpired ||
+        this.props.vaccaro !== nextProps.vaccaro) {
+      return true;
     }
-    let logo = dataResultado.entidad === 'Montevideo' ||  dataResultado.entidad === 'Vaccaro' ? '' : dataResultado.logo;
-    return (
-      <IconWidget
-        bgColor="white"
-        inverse={false}
-        icon={MdThumbUp}
-        subtitle="Mayor precio de compra"
-        entidad={dataResultado.entidad}
-        valor={`$ ${dataResultado.compra}`}
-        logo={logo}
-      />
-    );
+
+    return false
   }
-  
-  cotizacionBajaCompraIconWidget(cotizacionParam) {
-    if (!cotizacionParam[0]) {
-      return;
-    }
-    let dataResultado;
-    let resultado = parseFloat(cotizacionParam[0].compra).toFixed(2);
-    
-    for(let i=0; i < ENTIDADES.length; i++) {
-      if (!cotizacionParam[i]) {
-        return;
-      }
-      if(parseFloat(cotizacionParam[i].compra).toFixed(2) <= resultado) {
-        resultado = parseFloat(cotizacionParam[i].compra).toFixed(2)
-        dataResultado = cotizacionParam[i];
-      }
-    }
-    let logo = dataResultado.entidad === 'Montevideo' ||  dataResultado.entidad === 'Vaccaro' ? '' : dataResultado.logo;
-    return (
-      <IconWidget
-        bgColor="white"
-        inverse={false}
-        icon={MdThumbUp}
-        subtitle="Menor precio de compra"
-        entidad={dataResultado.entidad}
-        valor={`$ ${dataResultado.compra}`}
-        logo={logo}
-      />
-    );
-  }
-
-  cotizacionAltaVentaIconWidget(cotizacionParam) {
-    let dataResultado;
-    let resultado = 0;
-    
-    for(let i=0; i < ENTIDADES.length; i++) {
-      if (!cotizacionParam[i]) {
-        return;
-      }
-      if(parseFloat(cotizacionParam[i].venta).toFixed(2) > resultado) {
-        resultado = parseFloat(cotizacionParam[i].venta).toFixed(2);
-        dataResultado=cotizacionParam[i];
-      }
-    }
-    let logo = dataResultado.entidad === 'Montevideo' ||  dataResultado.entidad === 'Vaccaro' ? '' : dataResultado.logo;
-    return (
-      <IconWidget
-        bgColor="white"
-        inverse={false}
-        icon={MdThumbUp}
-        subtitle="Mayor precio de venta"
-        entidad={dataResultado.entidad}
-        valor={`$ ${dataResultado.venta}`}
-        logo={logo}
-      />
-    );
-  }
-
-  cotizacionBajaVentaIconWidget(cotizacionParam) {
-    if (!cotizacionParam[0]) {
-      return;
-    }
-    let dataResultado;
-    let resultado = parseFloat(cotizacionParam[0].venta).toFixed(2);
-    
-    for(let i=0; i < ENTIDADES.length; i++) {
-      if (!cotizacionParam[i]) {
-        return;
-      }
-      if(parseFloat(cotizacionParam[i].venta).toFixed(2) <= resultado) {
-        resultado = parseFloat(cotizacionParam[i].venta).toFixed(2)
-        dataResultado = cotizacionParam[i];
-      }
-    }
-    let logo = dataResultado.entidad === 'Montevideo' ||  dataResultado.entidad === 'Vaccaro' ? '' : dataResultado.logo;
-    return (
-      <IconWidget
-        bgColor="white"
-        inverse={false}
-        icon={MdThumbUp}
-        subtitle="Menor precio de venta"
-        entidad={dataResultado.entidad}
-        valor={`$ ${dataResultado.venta}`}
-        logo={logo}
-      />
-    );
-  }
-
-  cotizacionMayorSpreadIconWidget(cotizacionParam) {
-    if (!cotizacionParam[0]) {
-      return;
-    }
-    let dataResultado;
-    let resultadoCompra;
-    let resultadoVenta;
-    let resultado = 0;
-    let resultadoTemp;
-
-    
-    for(let i=0; i < ENTIDADES.length; i++) {
-      if (!cotizacionParam[i]) {
-        return;
-      }
-      
-      resultadoCompra = parseFloat(cotizacionParam[0].compra);
-      resultadoVenta = parseFloat(cotizacionParam[0].venta);
-      resultadoTemp = resultadoVenta - resultadoCompra;
-      if(resultadoTemp > resultado) {
-        resultado = resultadoTemp.toFixed(2);
-        dataResultado = cotizacionParam[i];
-      }
-    }
-    let logo = dataResultado.entidad === 'Montevideo' ||  dataResultado.entidad === 'Vaccaro' ? '' : dataResultado.logo;
-    return (
-      <IconWidget
-        bgColor="white"
-        inverse={false}
-        icon={MdThumbUp}
-        subtitle="Mayor spread entre precios"
-        entidad={dataResultado.entidad}
-        valor={`$ ${resultado}`}
-        logo={logo}
-      />
-    );
-  }
-
-  cotizacionMenorSpreadIconWidget(cotizacionParam) {
-    if (!cotizacionParam[0]) {
-      return;
-    }
-    let dataResultado;
-    let resultadoCompra;
-    let resultadoVenta;
-    let resultado = parseFloat(cotizacionParam[0].venta).toFixed(2) - parseFloat(cotizacionParam[0].compra);
-
-    for(let i=0; i < ENTIDADES.length; i++) {
-      if (!cotizacionParam[i]) {
-        return;
-      }
-      
-      resultadoCompra = parseFloat(cotizacionParam[i].compra);
-      resultadoVenta = parseFloat(cotizacionParam[i].venta);
-      let resultadoTemp = resultadoVenta - resultadoCompra;
-
-      if(resultadoTemp <= resultado) {
-        resultado = resultadoTemp;
-        dataResultado = cotizacionParam[i];
-      }
-    }
-    let logo = dataResultado.entidad === 'Montevideo' ||  dataResultado.entidad === 'Vaccaro' ? '' : dataResultado.logo;
-    return (
-      <IconWidget
-        bgColor="white"
-        inverse={false}
-        icon={MdThumbUp}
-        subtitle="Menor spread entre precios"
-        entidad={dataResultado.entidad}
-        valor={`$ ${resultado.toFixed(2)}`}
-        logo={logo}
-      />
-    );
-  }
-
-  getDataTable(cotizacionParam) {
-    return (
-      <Col lg="12" md="12" sm="12" xs="12">
-        <DatatablePage rowData={cotizacionParam}/>
-      </Col>
-    );
-  }
-
-  async getCotizacionesNow() {
-    Promise.all(ENTIDADES.map((entidades)=>{
-      fetch(API + entidades)
-      .then(response => {
-        return response.json();
-      })
-      .then((data) => {
-        data = data.slice(0, 5);
-        for(let i=0; i<data.length; i++) {
-          data[i].logo = `/entidades/${entidades}.png`;
-        }
-        return this.setState(prevState => ({
-          entidades: {
-            ...prevState.entidades,
-            [entidades]: {
-              data
-            }
-          }
-        }));
-      })
-      .catch(error => console.log(error));
-    }
-    ))
-  };
 
   render() {
     console.log(this.props);
-    let cotizacionParam = [];
 
-    let cotizacionWidget = ENTIDADES.map((data, i)=>{
-      if (!this.state.entidades[data].data) {
-        return;
-      }
-      let item = this.state.entidades[data].data[0];
-      cotizacionParam.push(item);
-      let logo = item.entidad === 'Montevideo' ||  item.entidad === 'Vaccaro' ? '' : item.logo;
-      let barColorCompra = item.compra >= this.state.entidades[data].data[1].compra ? 'success' : 'danger';
-      let barColorVenta = item.venta >= this.state.entidades[data].data[1].venta ? 'success' : 'danger';
-      let porcentajeCompra = (((item.compra/this.state.entidades[data].data[1].compra)*100)-100).toFixed(2);
-      let porcentajeVenta = (((item.venta/this.state.entidades[data].data[1].venta)*100)-100).toFixed(2);
-      let spread = item.venta - item.compra;
+    let iconCotizaciones, numberCotizaciones;
 
-      return (<Col key={i} lg={6} md={6} sm={12} xs={12}>
-        <NumberWidget
-          title={item.entidad}
-          subtitle={`${item.dia} ${item.hora}`}
-          spread={spread}
-          compra={item.compra}
-          anteriorCompra = {this.state.entidades[data].data[1].compra}
-          venta={item.venta}
-          anteriorVenta = {this.state.entidades[data].data[1].venta}
-          logo = {logo}
-          colorCompra = {barColorCompra}
-          colorVenta = {barColorVenta}
-          modificacionCompra = {porcentajeCompra}
-          modificacionVenta = {porcentajeVenta}
-          progress={{
-            label: 'Porcentaje de variacion',
-          }}
-        />
-      </Col>);
-    })
+    if (this.props.tokenExpired) {
+      return <Redirect to="/dashboard"/>
+    }
+
+    let ultimasDosRuedas = [];
+
+    ultimasDosRuedas.push(this.props.alpe.slice(1, 3), this.props.columbia.slice(1, 3), this.props.frances.slice(1, 3), this.props.galicia.slice(1, 3), this.props.icbc.slice(1, 3), this.props.maguitur.slice(1, 3), this.props.maxinta.slice(1, 3), this.props.montevideo.slice(1, 3), this.props.nacion.slice(1, 3), this.props.patagonia.slice(1, 3), this.props.provincia.slice(1, 3), this.props.santander.slice(1, 3), this.props.supervielle.slice(1, 3), this.props.vaccaro.slice(1, 3));
+
+    if (Object.entries(this.props.entidades).length !== 0 && this.props.vaccaro.length > 0 && this.props.supervielle.length > 0 && this.props.santander.length > 0 && this.props.provincia.length > 0 && this.props.patagonia.length > 0 && this.props.nacion.length > 0 && this.props.montevideo.length > 0 && this.props.maxinta.length > 0 && this.props.maguitur.length > 0 && this.props.icbc.length > 0 && this.props.galicia.length > 0 && this.props.frances.length > 0 && this.props.columbia.length > 0 && this.props.alpe.length > 0) {
+      iconCotizaciones = (<IconsCotizaciones entidades={Object.values(this.props.entidades)}/>);
+      numberCotizaciones = (<NumberCotizaciones ultimasDosRuedas={ultimasDosRuedas}/>);
+    }
+
+
+    
     return (
       <Page
         className="DashboardPage"
         title="Panel de control"
         style={{ marginBottom: '2rem', marginTop: '2rem' }}>
-        <Row>
-          <Col lg="12" md="12" sm="12" xs="12">
-          <CardGroup style={ {marginTop: '2rem' }}
-          lg={3} md={3} sm={12} xs={12}>
-            {this.cotizacionAltaCompraIconWidget(cotizacionParam)}
-            {this.cotizacionAltaVentaIconWidget(cotizacionParam)}
-            {this.cotizacionMayorSpreadIconWidget(cotizacionParam)}
-          </CardGroup>
-          <CardGroup style={ { marginBottom: '2rem'}}
-          lg={3} md={3} sm={12} xs={12}>
-            {this.cotizacionBajaCompraIconWidget(cotizacionParam)}
-            {this.cotizacionBajaVentaIconWidget(cotizacionParam)}
-            {this.cotizacionMenorSpreadIconWidget(cotizacionParam)}
-          </CardGroup>
-          </Col>
-        </Row>
-
-        <Row>
-          {cotizacionWidget}
-        </Row>
-
-        <Row style={{ marginBottom: '2rem', marginTop: '2rem' }}>
-          {this.getDataTable(cotizacionParam)}
-        </Row>
+          {iconCotizaciones}
+          {numberCotizaciones}
 
         {/* <Row>
           <Col lg="8" md="12" sm="12" xs="12">
@@ -608,9 +346,30 @@ class DashboardPage extends React.Component {
 
 const mapStatetoProps = (state) => {
   return {
-    user: state.user.user,
-    entidades: state.entidades.entidades
+    alpe: state.dashboard.alpe,
+    columbia: state.dashboard.columbia,
+    entidades: state.dashboard.entidades,
+    frances: state.dashboard.frances,
+    galicia: state.dashboard.galicia,
+    icbc: state.dashboard.icbc,
+    maguitur: state.dashboard.maguitur,
+    maxinta: state.dashboard.maxinta,
+    montevideo: state.dashboard.montevideo,
+    nacion: state.dashboard.nacion,
+    patagonia: state.dashboard.patagonia,
+    provincia: state.dashboard.provincia,
+    santander: state.dashboard.santander,
+    supervielle: state.dashboard.supervielle,
+    tokenExpired: state.dashboard.tokenExpired,
+    vaccaro: state.dashboard.vaccaro,
   }
 }
 
-export default connect(mapStatetoProps)(DashboardPage);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getEntidades: () => dispatch(getEntidades()),
+    getEntidadesHistorico: (entidadesList) => dispatch(getEntidadesHistorico(entidadesList))
+  }
+}
+
+export default connect(mapStatetoProps, mapDispatchToProps)(DashboardPage);
