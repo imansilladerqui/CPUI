@@ -1,6 +1,6 @@
 import {STATE_LOGIN, STATE_SIGNUP} from 'components/AuthForm';
 import GAListener from 'components/GAListener';
-import {EmptyLayout, LayoutRoute, MainLayout, ProtectedRoute} from 'components/Layout';
+import {EmptyLayout, LayoutRoute, MainLayout} from 'components/Layout';
 import AlertPage from 'pages/AlertPage';
 import AuthModalPage from 'pages/AuthModalPage';
 import AuthPage from 'pages/AuthPage';
@@ -24,14 +24,14 @@ import componentQueries from 'react-component-queries';
 import {BrowserRouter, Redirect, Switch} from 'react-router-dom';
 import './styles/reduction.css';
 
-// const getBasename = () => {
-//   return `/${process.env.PUBLIC_URL.split('/').pop()}`;
-// };
+const getBasename = () => {
+  return `/${process.env.PUBLIC_URL.split('/').pop()}`;
+};
 
 class App extends React.Component {
   render() {
     return (
-      <BrowserRouter /*basename={getBasename()}*/>
+      <BrowserRouter basename={getBasename()}>
         <GAListener>
           <Switch>
             <LayoutRoute
@@ -50,103 +50,103 @@ class App extends React.Component {
                 <AuthPage {...props} authState={STATE_SIGNUP} />
               )}
             />
-            <ProtectedRoute
+            <LayoutRoute
               exact
               path="/login-modal"
               layout={MainLayout}
               component={AuthModalPage}
             />
-            <ProtectedRoute
+            <LayoutRoute
               exact
               path="/dashboard"
               layout={MainLayout}
               component={DashboardPage}
             />
-            <ProtectedRoute
+            <LayoutRoute
               exact
               path="/buttons"
               layout={MainLayout}
               component={ButtonPage}
             />
-            <ProtectedRoute
+            <LayoutRoute
               exact
               path="/cards"
               layout={MainLayout}
               component={CardPage}
             />
-            <ProtectedRoute
+            <LayoutRoute
               exact
               path="/widgets"
               layout={MainLayout}
               component={WidgetPage}
             />
-            <ProtectedRoute
+            <LayoutRoute
               exact
               path="/typography"
               layout={MainLayout}
               component={TypographyPage}
             />
-            <ProtectedRoute
+            <LayoutRoute
               exact
               path="/alerts"
               layout={MainLayout}
               component={AlertPage}
             />
-            <ProtectedRoute
+            <LayoutRoute
               exact
               path="/tables"
               layout={MainLayout}
               component={TablePage}
             />
-            <ProtectedRoute
+            <LayoutRoute
               exact
               path="/badges"
               layout={MainLayout}
               component={BadgePage}
             />
-            <ProtectedRoute
+            <LayoutRoute
               exact
               path="/button-groups"
               layout={MainLayout}
               component={ButtonGroupPage}
             />
-            <ProtectedRoute
+            <LayoutRoute
               exact
               path="/dropdowns"
               layout={MainLayout}
               component={DropdownPage}
             />
-            <ProtectedRoute
+            <LayoutRoute
               exact
               path="/progress"
               layout={MainLayout}
               component={ProgressPage}
             />
-            <ProtectedRoute
+            <LayoutRoute
               exact
               path="/modals"
               layout={MainLayout}
               component={ModalPage}
             />
-            <ProtectedRoute
+            <LayoutRoute
               exact
               path="/forms"
               layout={MainLayout}
               component={FormPage}
             />
-            <ProtectedRoute
+            <LayoutRoute
               exact
               path="/input-groups"
               layout={MainLayout}
               component={InputGroupPage}
             />
-            <ProtectedRoute
+            <LayoutRoute
               exact
               path="/charts"
               layout={MainLayout}
               component={ChartPage}
             />
-            <ProtectedRoute
+            <LayoutRoute
               exact
               path="/register"
               layout={MainLayout}
