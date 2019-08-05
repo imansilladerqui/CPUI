@@ -138,7 +138,7 @@ class AuthForm extends Component {
     }
 
     if(this.props.successLogin && !this.props.tokenExpired) {
-      return <Redirect to="dashboard" />
+      return <Redirect to='/dashboard' />
     }
 
     if(this.props.authState === STATE_SIGNUP) {
@@ -276,4 +276,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(AuthForm));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AuthForm));
