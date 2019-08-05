@@ -6,7 +6,7 @@ const LayoutRoute = ({ component: Component, layout: Layout, ...rest }) => (
   {...rest}
   render={props =>
     (localStorage.getItem('_token')) ? (
-      <Redirect to="/dashboard" />
+      <Redirect to="dashboard" />
     ) : (
       <Layout>
         <Component {...props} />
