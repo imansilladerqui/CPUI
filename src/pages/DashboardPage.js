@@ -63,7 +63,7 @@ class DashboardPage extends React.Component {
     let iconCotizaciones, numberCotizaciones;
 
     if (this.props.tokenExpired) {
-      return <Redirect to="dashboard"/>
+      return <Redirect to="/dashboard"/>
     }
 
     let ultimasDosRuedas = [];

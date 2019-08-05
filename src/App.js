@@ -25,7 +25,6 @@ import {BrowserRouter, Redirect, Switch} from 'react-router-dom';
 import './styles/reduction.css';
 
 const getBasename = () => {
-  console.log(`/${process.env.PUBLIC_URL.split('/').pop()}`);
   return `/${process.env.PUBLIC_URL.split('/').pop()}`;
 };
 

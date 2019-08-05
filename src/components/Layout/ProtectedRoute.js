@@ -10,7 +10,7 @@ const ProtectedRoute = ({ component: Component, layout: Layout, ...rest }) => (
                 <Component {...props} />
             </Layout>
         } else {
-            return <Redirect to={'/'}/>
+            return <Redirect to="/" />
         }
     }}
   />
