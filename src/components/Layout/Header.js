@@ -1,8 +1,6 @@
 
 import Avatar from 'components/Avatar';
 import bn from 'utils/bemnames';
-import {connect} from 'react-redux';
-import {getUser} from '../../store/actions/dashboardActions';
 import {MdNotificationsActive, MdNotificationsNone, MdInsertChart, MdPersonPin, MdMessage, MdSettingsApplications, MdHelp, MdClearAll, MdExitToApp} from 'react-icons/lib/md';
 import {Navbar, Nav, NavItem, NavLink, Popover, PopoverBody, ListGroup, ListGroupItem, Button} from 'reactstrap';
 import {notificationsData} from 'demos/header';
@@ -34,10 +32,6 @@ class Header extends React.Component {
     isNotificationConfirmed: false,
     isOpenUserCardPopover: false,
   };
-
-  componentDidMount() {
-    this.props.getUser();
-  }
 
   toggleNotificationPopover = () => {
     this.setState({
@@ -79,7 +73,7 @@ class Header extends React.Component {
         </Nav>
 
         <Nav navbar className={bem.e('nav-right')}>
-          <NavItem className="d-inline-flex">
+          {/* <NavItem className="d-inline-flex">
             <NavLink id="Popover1" className="position-relative">
               {isNotificationConfirmed ? (
                 <MdNotificationsNone
@@ -104,7 +98,7 @@ class Header extends React.Component {
                 <Notifications notificationsData={notificationsData} />
               </PopoverBody>
             </Popover>
-          </NavItem>
+          </NavItem> */}
 
           <NavItem>
             <NavLink id="Popover2">
@@ -122,15 +116,15 @@ class Header extends React.Component {
               style={{ minWidth: 250 }}>
               <PopoverBody className="p-0 border-light">
                 <UserCard
-                  title={this.props.name || 'Name'}
+                  title={this.props.name || 'Debes ingresar un nombre'}
                   subtitle={this.props.user.email}
                   text={`Last updated: ${this.props.user.updated_at}`}
                   className="border-light">
                   <ListGroup flush>
                     <ListGroupItem tag="button" action className="border-light">
-                      <MdPersonPin /> Profile
+                      <MdPersonPin /> Perfil
                     </ListGroupItem>
-                    {/* <ListGroupItem tag="button" action className="border-light">
+                    <ListGroupItem tag="button" action className="border-light">
                       <MdInsertChart /> Stats
                     </ListGroupItem>
                     <ListGroupItem tag="button" action className="border-light">
@@ -141,7 +135,7 @@ class Header extends React.Component {
                     </ListGroupItem>
                     <ListGroupItem tag="button" action className="border-light">
                       <MdHelp /> Help
-                    </ListGroupItem> */}
+                    </ListGroupItem>
                     <ListGroupItem tag="button" action onClick={this.handleLogOut} className="border-light">
                       <MdExitToApp /> Signout
                     </ListGroupItem>
@@ -156,16 +150,4 @@ class Header extends React.Component {
   }
 }
 
-const mapStatetoProps = (state) => {
-  return {
-    user: state.dashboard.user
-  }
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    getUser: () => dispatch(getUser())
-  }
-}
-
-export default connect(mapStatetoProps, mapDispatchToProps)(Header);
+export default Header;

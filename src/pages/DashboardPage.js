@@ -32,6 +32,12 @@ class DashboardPage extends React.Component {
     for(let i=0; i < entidadesList.length; i++) {
       this.props.getEntidadesHistorico(entidadesList[i]);
     }
+    setInterval(() => this.props.getEntidades(), 3600000);
+    setInterval(() => {
+      for(let i=0; i < entidadesList.length; i++) {
+        this.props.getEntidadesHistorico(entidadesList[i]);
+      }
+    }, 3600000);
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -58,12 +64,10 @@ class DashboardPage extends React.Component {
   }
 
   render() {
-    console.log(this.props);
-
     let iconCotizaciones, numberCotizaciones;
 
     if (this.props.tokenExpired) {
-      return <Redirect to="dashboard"/>
+      return <Redirect to="/"/>
     }
 
     let ultimasDosRuedas = [];
@@ -76,7 +80,7 @@ class DashboardPage extends React.Component {
     }
 
 
-    
+
     return (
       <Page
         className="DashboardPage"

@@ -138,7 +138,7 @@ class AuthForm extends Component {
     }
 
     if(this.props.successLogin && !this.props.tokenExpired) {
-      return <Redirect to="dashboard" />
+      return <Redirect to="/dashboard" />
     }
 
     if(this.props.authState === STATE_SIGNUP) {
