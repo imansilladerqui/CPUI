@@ -72,7 +72,7 @@ class DashboardPage extends React.Component {
 
     let ultimasDosRuedas = [];
 
-    ultimasDosRuedas.push(this.props.alpe.slice(1, 3), this.props.columbia.slice(1, 3), this.props.frances.slice(1, 3), this.props.galicia.slice(1, 3), this.props.icbc.slice(1, 3), this.props.maguitur.slice(1, 3), this.props.maxinta.slice(1, 3), this.props.montevideo.slice(1, 3), this.props.nacion.slice(1, 3), this.props.patagonia.slice(1, 3), this.props.provincia.slice(1, 3), this.props.santander.slice(1, 3), this.props.supervielle.slice(1, 3), this.props.vaccaro.slice(1, 3));
+    ultimasDosRuedas.push(this.props.alpe.slice(0, 2), this.props.columbia.slice(0, 2), this.props.frances.slice(0, 2), this.props.galicia.slice(0, 2), this.props.icbc.slice(0, 2), this.props.maguitur.slice(0, 2), this.props.maxinta.slice(0, 2), this.props.montevideo.slice(0, 2), this.props.nacion.slice(0, 2), this.props.patagonia.slice(0, 2), this.props.provincia.slice(0, 2), this.props.santander.slice(0, 2), this.props.supervielle.slice(0, 2), this.props.vaccaro.slice(0, 2));
 
     if (Object.entries(this.props.entidades).length !== 0 && this.props.vaccaro.length > 0 && this.props.supervielle.length > 0 && this.props.santander.length > 0 && this.props.provincia.length > 0 && this.props.patagonia.length > 0 && this.props.nacion.length > 0 && this.props.montevideo.length > 0 && this.props.maxinta.length > 0 && this.props.maguitur.length > 0 && this.props.icbc.length > 0 && this.props.galicia.length > 0 && this.props.frances.length > 0 && this.props.columbia.length > 0 && this.props.alpe.length > 0) {
       iconCotizaciones = (<IconsCotizaciones entidades={Object.values(this.props.entidades)}/>);
