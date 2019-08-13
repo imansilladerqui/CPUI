@@ -39,7 +39,6 @@ const dashboardReducer = (state = initState, action) => {
             }
 
         case 'HANDLE_ERROR_TOKEN':
-            console.log(...state);
             return {
                 ...state,
                 tokenExpired: true

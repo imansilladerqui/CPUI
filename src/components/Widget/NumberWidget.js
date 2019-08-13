@@ -39,8 +39,8 @@ const NumberWidget = ({
     )
   }
 
-  let mensajeVariacionVenta = (anteriorVenta === venta) ? ' No hubo modificaciones' : `la modificacion fue de ${anteriorVenta === venta}`;
-  let mensajeVariacionCompra = (anteriorCompra === compra) ? ' No hubo modificaciones' : `la modificacion fue de ${anteriorCompra === compra}`;
+  let mensajeVariacionVenta = (anteriorVenta === venta) ? ' No hubo modificaciones' : `la modificacion fue de $${(anteriorVenta - venta).toFixed(2)}`;
+  let mensajeVariacionCompra = (anteriorCompra === compra) ? ' No hubo modificaciones' : `la modificacion fue de $${ (anteriorCompra - compra).toFixed(2)}`;
 
   return (
     <Card body {...restProps}>
@@ -53,7 +53,6 @@ const NumberWidget = ({
         Actualizado: <br/> 
         {subtitle}
       </Typography>
-      <Row>
         <Col>
           <div className="d-flex justify-content-between">
             <CardText tag="div">
@@ -75,7 +74,6 @@ const NumberWidget = ({
             </Typography>
           </CardText>
         </Col>
-
         <Col>
           <div className="d-flex justify-content-between">
             <CardText tag="div">
@@ -97,7 +95,6 @@ const NumberWidget = ({
             </Typography>
           </CardText>
         </Col>
-      </Row>
       </div>  
     </Card>
   );

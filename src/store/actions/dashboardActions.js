@@ -23,10 +23,9 @@ export const getEntidades = () => {
         .catch(err=>{
             if (err.response.body.message === expiredMessage) {
                 localStorage.removeItem('_token');
-                return dispatch => {
-                    dispatch({
+                return dispatch({
                     type: 'HANDLE_ERROR_TOKEN',
-                })}
+                })
             }
         })
     }
@@ -52,10 +51,9 @@ export const getEntidadesHistorico = (entidadesList) => {
         .catch(err=>{
             if (err.response.body.message === expiredMessage) {
                 localStorage.removeItem('_token');
-                return dispatch => {
-                    dispatch({
+                return dispatch({
                     type: 'HANDLE_ERROR_TOKEN',
-                })}
+                })
             }
         })
     }
@@ -76,10 +74,9 @@ export const getUser = () => {
         .catch(err=>{
             if (err.response.body.message === expiredMessage) {
                 localStorage.removeItem('_token');
-                return dispatch => {
-                    dispatch({
+                return dispatch({
                     type: 'HANDLE_ERROR_TOKEN',
-                })}
+                })
             }
         })
     }
