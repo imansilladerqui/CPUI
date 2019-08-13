@@ -4,4 +4,5 @@ export { default as Footer } from './Footer';
 export { default as Header } from './Header';
 export { default as LayoutRoute } from './LayoutRoute';
 export { default as MainLayout } from './MainLayout';
+export { default as ProtectedRoute } from './ProtectedRoute';
 export { default as Sidebar } from './Sidebar';
