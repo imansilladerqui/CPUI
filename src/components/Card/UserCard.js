@@ -26,7 +26,7 @@ const UserCard = ({
         <CardTitle>{title}</CardTitle>
         <CardSubtitle>{subtitle}</CardSubtitle>
         <CardText>
-          <small>{text}</small>
+          <small className="text-white">{text}</small>
         </CardText>
       </CardBody>
       {children}

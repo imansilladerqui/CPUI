@@ -20,6 +20,9 @@ const initState = {
 
 const dashboardReducer = (state = initState, action) => {
     switch (action.type) {
+        case 'CLEAR_STATE':
+            return initState
+
         case 'GET_ENTIDADES': 
             return {
                 ...state,

@@ -2,6 +2,15 @@ const Request = require('superagent');
 
 const expiredMessage = 'Token has expired';
 
+export const dashboardClearState = () => {
+    console.log('hola');
+    return dispatch => {
+        dispatch({
+            type: 'CLEAR_STATE'
+        })
+    }
+}
+
 export const getEntidades = () => {
 
     return dispatch => {

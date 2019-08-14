@@ -18,6 +18,7 @@ export const loginUser = (credentials) => {
         .set('Content-Type', 'application/x-www-form-urlencoded')
         .send({email: credentials.email, password: credentials.password })
         .then(res=>{
+            // localStorage.setItem('_token', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjMsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9hcGkvbG9naW4iLCJpYXQiOjE1NjU2NDczMDIsImV4cCI6MTU2NTY2ODkwMiwibmJmIjoxNTY1NjQ3MzAyLCJqdGkiOiJCbFpYYWZTV3dsZk1uREN1In0.UrpkCKBEesnbluDfCxx0uKZDywYiuusb-_RToXzbhMk');
             localStorage.setItem('_token', res.body.token);
             dispatch({
                 type: 'LOGIN_OK'

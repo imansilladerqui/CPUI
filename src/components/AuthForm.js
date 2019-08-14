@@ -1,6 +1,7 @@
 import {Button, Form, FormGroup, Input, Label, UncontrolledAlert} from 'reactstrap';
 import {connect} from 'react-redux';
 import {loginUser, clearState, signUp} from '../store/actions/authActions';
+import {dashboardClearState} from '../store/actions/dashboardActions';
 import logocp from 'assets/img/logo/cplogo.svg';
 import PropTypes from 'prop-types';
 import React, {Component} from 'react';
@@ -86,6 +87,8 @@ class AuthForm extends Component {
   handleSubmit = event => {
     event.preventDefault();
 
+    this.props.dashboardClear();
+
     let errors = this.state.errors;
 
     if(this.props.authState === STATE_SIGNUP) {
@@ -135,6 +138,8 @@ class AuthForm extends Component {
         Tu sesión se venció, ingresa nuevamente.
       </UncontrolledAlert>)
     }
+
+    console.log(this.props);
 
     if(this.props.successLogin && !this.props.tokenExpired) {
       return <Redirect to="/dashboard" />
@@ -271,6 +276,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     signIn: (creds) => dispatch(loginUser(creds)),
     clearState: () => dispatch(clearState()),
+    dashboardClear: () => dispatch(dashboardClearState()),
     signUp: (creds) => dispatch(signUp(creds))
   }
 }
