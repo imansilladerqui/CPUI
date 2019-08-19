@@ -1,5 +1,4 @@
 
-// import {Row, Col} from 'reactstrap';
 import {connect} from 'react-redux';
 import {getEntidades, getEntidadesHistorico} from '../store/actions/dashboardActions';
 import {NumberCotizaciones, IconsCotizaciones} from 'components/Widget';

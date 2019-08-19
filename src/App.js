@@ -7,7 +7,7 @@ import AuthPage from 'pages/AuthPage';
 import BadgePage from 'pages/BadgePage';
 import ButtonGroupPage from 'pages/ButtonGroupPage';
 import ButtonPage from 'pages/ButtonPage';
-import CardPage from 'pages/CardPage';
+import UsersPage from 'pages/UsersPage';
 import ChartPage from 'pages/ChartPage';
 // pages
 import DashboardPage from 'pages/DashboardPage';
@@ -70,9 +70,9 @@ class App extends React.Component {
             />
             <ProtectedRoute
               exact
-              path="/cards"
+              path="/users"
               layout={MainLayout}
-              component={CardPage}
+              component={UsersPage}
             />
             <ProtectedRoute
               exact

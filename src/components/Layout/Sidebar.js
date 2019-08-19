@@ -2,31 +2,31 @@ import cplogo from 'assets/img/logo/cplogo.svg';
 import SourceLink from 'components/SourceLink';
 import React from 'react';
 import {
-  MdAccountCircle,
-  MdArrowDropDownCircle,
-  MdBorderAll,
-  MdBrush,
-  MdChromeReaderMode,
+  // MdAccountCircle,
+  // MdArrowDropDownCircle,
+  // MdBorderAll,
+  // MdBrush,
+  // MdChromeReaderMode,
   MdDashboard,
-  MdExtension,
-  MdGroupWork,
-  MdInsertChart,
-  MdKeyboardArrowDown,
-  MdNotificationsActive,
-  MdPages,
-  MdRadioButtonChecked,
-  MdSend,
-  MdStar,
-  MdTextFields,
-  MdViewCarousel,
-  MdViewDay,
-  MdViewList,
+  // MdExtension,
+  // MdGroupWork,
+  // MdInsertChart,
+  // MdKeyboardArrowDown,
+  // MdNotificationsActive,
+  // MdPages,
+  // MdRadioButtonChecked,
+  // MdSend,
+  // MdStar,
+  // MdTextFields,
+  // MdViewCarousel,
+  // MdViewDay,
+  // MdViewList,
   MdWeb,
-  MdWidgets,
+  // MdWidgets,
 } from 'react-icons/lib/md';
 import { NavLink } from 'react-router-dom';
 import {
-  Collapse,
+  // Collapse,
   Nav,
   Navbar,
   NavItem,
@@ -77,16 +77,12 @@ const navItemsUser = [
 
 const navItemsAdmin = [
   { to: '/', name: 'Panel de Control', exact: true, Icon: MdDashboard },
-  { to: '/users', name: 'Usuarios', exact: false, Icon: MdWeb },
-  { to: '/charts', name: 'charts', exact: false, Icon: MdInsertChart },
-  { to: '/widgets', name: 'widgets', exact: false, Icon: MdWidgets },
+  { to: '/users', name: 'Usuarios', exact: false, Icon: MdWeb }
 ];
 
 const navItemsOwner = [
   { to: '/', name: 'Panel de Control', exact: true, Icon: MdDashboard },
-  { to: '/users', name: 'Usuarios', exact: false, Icon: MdWeb },
-  { to: '/charts', name: 'charts', exact: false, Icon: MdInsertChart },
-  { to: '/widgets', name: 'widgets', exact: false, Icon: MdWidgets },
+  { to: '/users', name: 'Usuarios', exact: false, Icon: MdWeb }
 ];
 
 
@@ -112,15 +108,18 @@ class Sidebar extends React.Component {
   render() {
     let navItems = [];
     
-    switch(this.props.user.roleId) {
-      case 1:
+    switch(this.props.user.roleName) {
+      case 'user':
         navItems = navItemsUser;
         break
-      case 2: 
+      case 'admin': 
         navItems = navItemsAdmin;
         break
-      case 3:
+      case 'owner':
         navItems = navItemsOwner;
+        break;
+      default: 
+        navItems = navItemsUser;
         break;
     }
  

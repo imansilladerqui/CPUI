@@ -90,3 +90,27 @@ export const getUser = () => {
         })
     }
 }
+
+export const getUsuarios = () => {
+
+    return dispatch => {
+        Request
+        .get('https://protected-mountain-77919.herokuapp.com/api/allusuarios')
+        .set({'authorization': 'Bearer ' + localStorage.getItem('_token')})
+        .accept('application/json')
+        .then(res=>{
+            dispatch({
+                type: 'GET_USUARIOS',
+                usuarios: res.body
+            })
+        })
+        .catch(err=>{
+            if (err.response.body.message === expiredMessage) {
+                localStorage.removeItem('_token');
+                return dispatch({
+                    type: 'HANDLE_ERROR_TOKEN',
+                })
+            }
+        })
+    }
+}
