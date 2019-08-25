@@ -1,18 +1,6 @@
 import Page from 'components/Page';
 import React from 'react';
-import {
-  Button,
-  ButtonGroup,
-  Card,
-  CardBody,
-  CardHeader,
-  Col,
-  Modal,
-  ModalBody,
-  ModalFooter,
-  ModalHeader,
-  Row,
-} from 'reactstrap';
+import {Button, ButtonGroup, Card, CardBody, CardHeader, Col, Modal, ModalBody, ModalFooter, ModalHeader, Row} from 'reactstrap';
 
 class ModalPage extends React.Component {
   state = {

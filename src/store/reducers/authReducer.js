@@ -15,7 +15,6 @@ const AuthReducer = (state = initState, action) => {
                 showPreloader: true
             }
         case 'LOGIN_OK':
-        case 'REGISTER_OK':
             return {
                 ...state,
                 successLogin: true,

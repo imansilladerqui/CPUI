@@ -41,11 +41,6 @@ const dashboardReducer = (state = initState, action) => {
                 ...state,
                 user: action.user
             }
-        case 'GET_USUARIOS': 
-            return {
-                ...state,
-                allUsuarios: action.usuarios
-            }
         case 'HANDLE_ERROR_TOKEN':
             return {
                 ...state,

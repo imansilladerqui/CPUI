@@ -1,248 +1,26 @@
-// import React from 'react';
-
-// import {
-//   Card,
-//   CardTitle,
-//   CardBody,
-//   CardImg,
-//   CardImgOverlay,
-//   CardText,
-//   CardLink,
-//   ListGroup,
-//   ListGroupItem,
-//   Row,
-//   Col,
-//   Button,
-// } from 'reactstrap';
-
-// import { Line } from 'react-chartjs-2';
-
-// import { overlayCards, bgCards, gradientCards } from 'demos/cardPage';
-
-// import { getStackLineChart, stackLineChartOptions } from 'demos/chartjs';
-
-// import Page from 'components/Page';
-// import { UserCard } from 'components/Card';
-
-// import bg1Image from 'assets/img/bg/background_640-1.jpg';
-// import bg3Image from 'assets/img/bg/background_640-3.jpg';
-// import bg11Image from 'assets/img/bg/background_1920-11.jpg';
-// import bg18Image from 'assets/img/bg/background_1920-18.jpg';
-// import user1Image from 'assets/img/users/100_1.jpg';
-
 import {connect} from 'react-redux';
 import DatatablePage from '../pages/TablePage';
 import {MDBBtn} from 'mdbreact';
-import {getUsuarios} from '../store/actions/dashboardActions';
+import {deleteSelectedUser, getUsuarios, getSelectedUser} from '../store/actions/userActions';
 import Page from 'components/Page';
 import React from 'react';
 import {Redirect} from 'react-router-dom';
-
-// const UsersPage = () => {
-//   return (
-//     <Page title="Cards" breadcrumbs={[{ name: 'cards', active: true }]}>
-//       <Row>
-//         <Col md={6} sm={6} xs={12} className="mb-3">
-//           <Card className="flex-row">
-//             <CardImg
-//               className="card-img-left"
-//               src={bg1Image}
-//               style={{ width: 'auto', height: 150 }}
-//             />
-//             <CardBody>
-//               <CardTitle>Horizontal Image Card(Left)</CardTitle>
-//               <CardText>
-//                 Some quick example text to build on the card title and make up
-//                 the bulk of the card's content.
-//               </CardText>
-//             </CardBody>
-//           </Card>
-//         </Col>
-
-//         <Col md={6} sm={6} xs={12} className="mb-3">
-//           <Card className="flex-row">
-//             <CardBody>
-//               <CardTitle>Horizontal Image Card(Right)</CardTitle>
-//               <CardText>Some quick example card</CardText>
-//             </CardBody>
-//             <CardImg
-//               className="card-img-right"
-//               src={bg3Image}
-//               style={{ width: 'auto', height: 150 }}
-//             />
-//           </Card>
-//         </Col>
-//       </Row>
-//       <Row>
-//         <Col md={6} sm={6} xs={12} className="mb-3">
-//           <Card>
-//             <CardImg top src={bg11Image} />
-//             <CardBody>
-//               <CardTitle>Card with image</CardTitle>
-//               <CardText>
-//                 Some quick example text to build on the card title and make up
-//                 the bulk of the card's content.
-//               </CardText>
-//             </CardBody>
-//           </Card>
-//         </Col>
-
-//         <Col md={6} sm={6} xs={12} className="mb-3">
-//           <Card>
-//             <CardImg top src={bg18Image} />
-//             <CardBody>
-//               <CardTitle>Card with list group</CardTitle>
-//               <CardText>
-//                 This example shows how to use card with list group{' '}
-//               </CardText>
-//             </CardBody>
-//             <ListGroup flush>
-//               <ListGroupItem>Cras justo odio</ListGroupItem>
-//               <ListGroupItem>Dapibus ac facilisis in</ListGroupItem>
-//               <ListGroupItem>Morbi leo risus</ListGroupItem>
-//             </ListGroup>
-//             <CardBody>
-//               <CardLink tag="a" href="#">
-//                 Go to details
-//               </CardLink>
-//               <CardLink tag="a" href="#">
-//                 More
-//               </CardLink>
-//             </CardBody>
-//           </Card>
-//         </Col>
-//       </Row>
-
-//       <Row>
-//         {['', 'top', 'left', 'right'].map(color => (
-//           <Col md={6} sm={6} xs={12} className="mb-3">
-//             <Card
-//               inverse
-//               className={`border-0 bg-gradient-theme${
-//                 !!color ? '-' : ''
-//               }${color}`}
-//               style={{
-//                 height: 200,
-//               }}>
-//               <CardBody className="d-flex flex-column justify-content-start align-items-start">
-//                 <CardTitle>Card title</CardTitle>
-//                 <CardText>card text</CardText>
-//               </CardBody>
-
-//               <CardBody className="d-flex justify-content-between align-items-center">
-//                 <CardText>Karl David</CardText>
-//                 <Button outline color="light">
-//                   Click
-//                 </Button>
-//               </CardBody>
-//             </Card>
-//           </Col>
-//         ))}
-//       </Row>
-
-//       <Row>
-//         {overlayCards.map(({ imgUrl }) => {
-//           return (
-//             <Col md={6} sm={6} xs={12}>
-//               <Card inverse className="text-center">
-//                 <CardImg width="100%" src={imgUrl} alt="Card image cap" />
-//                 <CardImgOverlay>
-//                   <CardTitle>Card Title</CardTitle>
-//                   <CardText>inversed card</CardText>
-//                   <CardText>
-//                     <small className="text-muted">
-//                       Last updated 3 mins ago
-//                     </small>
-//                   </CardText>
-//                 </CardImgOverlay>
-//               </Card>
-//             </Col>
-//           );
-//         })}
-//       </Row>
-
-//       <Row>
-//         <Col md={5}>
-//           <UserCard
-//             avatar={user1Image}
-//             title="Chris"
-//             subtitle="Project Lead"
-//             text="Give me a star!"
-//             style={{
-//               height: 300,
-//             }}
-//           />
-//         </Col>
-
-//         <Col md={7}>
-//           <Card>
-//             <Line
-//               data={getStackLineChart({
-//                 labels: [
-//                   'January',
-//                   'February',
-//                   'March',
-//                   'April',
-//                   'May',
-//                   'June',
-//                   'July',
-//                 ],
-//                 data: [0, 13000, 5000, 24000, 16000, 25000, 10000],
-//               })}
-//               options={stackLineChartOptions}
-//             />
-//             <CardBody className="text-primary" style={{ position: 'absolute' }}>
-//               <CardTitle>Chart Card</CardTitle>
-//             </CardBody>
-//           </Card>
-//         </Col>
-//       </Row>
-
-//       <Row>
-//         {bgCards.map(({ color }) => (
-//           <Col lg={4} md={6} sm={6} xs={12} className="mb-3">
-//             <Card inverse color={color}>
-//               <CardBody>
-//                 <CardTitle className="text-capitalize">
-//                   {color} card title
-//                 </CardTitle>
-//                 <CardText>
-//                   Some quick example text to build on the card title and make up
-//                   the bulk of the card's content.
-//                 </CardText>
-//               </CardBody>
-//             </Card>
-//           </Col>
-//         ))}
-//       </Row>
-
-//       <Row>
-//         {gradientCards.map(({ color }) => (
-//           <Col lg={4} md={6} sm={6} xs={12} className="mb-3">
-//             <Card
-//               inverse
-//               className={`bg-gradient-${color} text-center`}
-//               style={{ height: 200 }}>
-//               <CardBody className="d-flex flex-column flex-wrap justify-content-center align-items-center">
-//                 <CardTitle>Gradient {color} title</CardTitle>
-//                 <CardText>card text</CardText>
-//               </CardBody>
-//             </Card>
-//           </Col>
-//         ))}
-//       </Row>
-//     </Page>
-//   );
-// };
-
-// export default UsersPage;
+import {Button, Modal, ModalBody, ModalFooter, ModalHeader} from 'reactstrap';
 
 class UsersPage extends React.Component {
 
 constructor(props) {
   super(props);
 
+  this.state = {
+    editUserModal: false,
+    deleteUserModal: false,
+    userClicked: {}
+  };
+
   this.deleteUser = this.deleteUser.bind(this);
+  this.editUser = this.editUser.bind(this);
+  this.toggle = this.toggle.bind(this);
 }
 
 componentDidMount() {
@@ -251,28 +29,113 @@ componentDidMount() {
 
 shouldComponentUpdate(nextProps, nextState) {
   if (this.props.tokenExpired !== nextProps.tokenExpired ||
-      this.props.allUsuarios !== nextProps.allUsuarios) {
+      this.props.allUsuarios !== nextProps.allUsuarios || 
+      this.props.selectedUser !== nextProps.selectedUser) {
+    return true;
+  }
+
+  if (this.state.editUserModal !== nextState.editUserModal ||
+    this.state.deleteUserModal !== nextState.deleteUserModal) {
     return true;
   }
 
   return false
 }
 
-deleteUser(id) {
-  console.log(id);
+deleteUser() {
+  this.props.deleteSelectedUser(this.state.userClicked.id)
+  this.setState({
+    deleteUserModal: false
+  })
 }
 
 editUser(id) {
   console.log(id);
+  // this.props.getSelectedUser();
 }
 
+openDeleteUserModal(user) {
+  this.setState({
+    deleteUserModal: true,
+    userClicked: user
+  })
+}
+
+openEditUserModal(user) {
+  this.setState({
+    editUserModal: true,
+    userClicked: user
+  })
+}
+
+toggle = modalType => () => {
+  this.setState({
+    [`${modalType}`]: !this.state[`${modalType}`],
+  });
+};
+
+
 render() {
+
+  let editUserModal;
+  let deleteUserModal;
+
+  if(this.state.editUserModal) {
+    editUserModal = (
+      <Modal
+        isOpen={this.state.editUserModal}
+        className={this.props.className}>
+        <ModalHeader toggle={this.toggle('editUserModal')}>Modal title</ModalHeader>
+        <ModalBody>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+        sed do eiusmod tempor incididunt ut labore et dolore magna
+        aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+        ullamco laboris nisi ut aliquip ex ea commodo consequat.
+        Duis aute irure dolor in reprehenderit in voluptate velit
+        esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
+        occaecat cupidatat non proident, sunt in culpa qui officia
+        deserunt mollit anim id est laborum.
+        </ModalBody>
+        <ModalFooter>
+        <Button color="primary">
+            Enviar
+        </Button>{' '}
+        <Button color="secondary" onClick={this.toggle('editUserModal')}>
+            Cancelar
+        </Button>
+        </ModalFooter>
+      </Modal>
+    );
+  }
+
+  if(this.state.deleteUserModal) {
+
+    deleteUserModal = (
+      <Modal
+        isOpen={this.state.deleteUserModal}
+        className={this.props.className}>
+        <ModalHeader toggle={this.toggle('deleteUserModal')}>Eliminar Usuario</ModalHeader>
+        <ModalBody>
+        ¿Estas seguro que deseas eliminar a {this.state.userClicked.email} ?
+        </ModalBody>
+        <ModalFooter>
+        <Button color="primary" onClick={this.deleteUser}>
+            Borrar
+        </Button>{' '}
+        <Button color="secondary" onClick={this.toggle('deleteUserModal')}>
+            Cancelar
+        </Button>
+        </ModalFooter>
+      </Modal>
+    );
+  }
+  
 
   this.props.allUsuarios.forEach((data) => {
     data.delete = (
       <div>
-        <MDBBtn color="light-green" rounded size="sm" onClick={()=>{this.editUser(data.id)}} >Edit</MDBBtn>
-        <MDBBtn color="danger" size="sm" onClick={()=>{this.deleteUser(data.id)}}>Delete</MDBBtn>
+        <MDBBtn color="light-green" rounded size="sm" onClick={()=>{this.openEditUserModal(data)}} >Editar</MDBBtn>
+        <MDBBtn color="danger" size="sm" onClick={()=>{this.openDeleteUserModal(data)}}>Eliminar</MDBBtn>
       </div>);
   });
 
@@ -321,6 +184,8 @@ render() {
       className="DashboardPage"
       title="Usuarios"
       style={{ marginBottom: '2rem', marginTop: '2rem' }}>
+      {editUserModal}
+      {deleteUserModal}
       <DatatablePage dataTable={dataTable}/>
     </Page>
   );
@@ -330,13 +195,16 @@ render() {
 const mapStatetoProps = (state) => {
   return {
     tokenExpired: state.dashboard.tokenExpired,
-    allUsuarios: state.dashboard.allUsuarios
+    allUsuarios: state.user.allUsuarios,
+    selectedUser: state.user.selectedUser
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    deleteSelectedUser: (id) => dispatch(deleteSelectedUser(id)),
     getUsuarios: () => dispatch(getUsuarios()),
+    getSelectedUser: (id) => dispatch(getSelectedUser(id)),
   }
 }
 

@@ -139,8 +139,6 @@ class AuthForm extends Component {
       </UncontrolledAlert>)
     }
 
-    console.log(this.props);
-
     if(this.props.successLogin && !this.props.tokenExpired) {
       return <Redirect to="/dashboard" />
     }
