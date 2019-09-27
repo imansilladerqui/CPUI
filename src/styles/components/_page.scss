@@ -35,3 +35,16 @@
     }
   }
 }
+
+.content-page {
+  flex: 1 0 auto;
+}
+
+.content-footer {
+  flex-direction: column;
+}
+
+.required {
+  color: red;
+  margin-left: 5px;
+}

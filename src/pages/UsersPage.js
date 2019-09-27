@@ -1,7 +1,7 @@
 import {connect} from 'react-redux';
 import DatatablePage from '../pages/TablePage';
 import {MDBBtn} from 'mdbreact';
-import {deleteSelectedUser, getUsuarios, getSelectedUser} from '../store/actions/userActions';
+import {deleteSelectedUser, getUsuarios, getProfile} from '../store/actions/userActions';
 import Page from 'components/Page';
 import React from 'react';
 import {Redirect} from 'react-router-dom';
@@ -51,7 +51,7 @@ deleteUser() {
 
 editUser(id) {
   console.log(id);
-  // this.props.getSelectedUser();
+  // this.props.getProfile();
 }
 
 openDeleteUserModal(user) {
@@ -204,7 +204,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     deleteSelectedUser: (id) => dispatch(deleteSelectedUser(id)),
     getUsuarios: () => dispatch(getUsuarios()),
-    getSelectedUser: (id) => dispatch(getSelectedUser(id)),
+    getProfile: (id) => dispatch(getProfile(id)),
   }
 }
 

@@ -33,7 +33,7 @@ class MainLayout extends React.Component {
 
         this.notificationSystem.addNotification({
           title: <MdInfoOutline />,
-          message: `Bienvenido ${this.props.user.email}, al panel de control de Cambio Posadas!`,
+          message: `Bienvenido ${this.props.user.nombre}, al panel de control de Cambio Posadas!`,
           level: 'info',
         });
       }, 1500);

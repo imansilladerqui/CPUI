@@ -15,14 +15,6 @@ export const deleteSelectedUser = (id) => {
     }
 }
 
-export const userClearState = () => {
-    return dispatch => {
-        dispatch({
-            type: 'CLEAR_STATE'
-        })
-    }
-}
-
 export const getUsuarios = () => {
 
     return dispatch => {
@@ -47,27 +39,55 @@ export const getUsuarios = () => {
     }
 }
 
-export const getSelectedUser = (id) => {
+
+
+export const getProfile = (id) => {
 
     return dispatch => {
         Request
-        .get(`https://protected-mountain-77919.herokuapp.com/api/usuario/${id}`)
+        .get(`https://protected-mountain-77919.herokuapp.com/api/profile/${id}`)
         .set({'authorization': 'Bearer ' + localStorage.getItem('_token')})
         .accept('application/json')
         .then(res=>{
-            let selectedUser = res.body[0];
             dispatch({
-                type: 'EDIT_USUARIO',
-                selectedUsuario: selectedUser
+                type: 'GET_PROFILE',
+                selectedUsuario: res.body
             })
         })
         .catch(err=>{
-            if (err.response.body.message === expiredMessage) {
+            if (err.response.body.message && (err.response.body.message === expiredMessage)) {
                 localStorage.removeItem('_token');
                 return dispatch({
                     type: 'HANDLE_ERROR_TOKEN',
                 })
             }
+        })
+    }
+}
+
+export const updateProfile = (id, data) => {
+
+    return dispatch => {
+        Request
+        .post(`https://protected-mountain-77919.herokuapp.com/api/profile/${id}`)
+        .set({'authorization': 'Bearer ' + localStorage.getItem('_token')})
+        .accept('application/json')
+        .send(data)
+        .catch(err=>{
+            if (err.response.body.message && (err.response.body.message === expiredMessage)) {
+                localStorage.removeItem('_token');
+                return dispatch({
+                    type: 'HANDLE_ERROR_TOKEN',
+                })
+            }
+        })
+    }
+}
+
+export const userClearState = () => {
+    return dispatch => {
+        dispatch({
+            type: 'CLEAR_STATE'
         })
     }
 }

@@ -40,7 +40,7 @@ export const signUp = (credentials) => {
         Request
         .post('https://protected-mountain-77919.herokuapp.com/api/signup')
         .set('Content-Type', 'application/x-www-form-urlencoded')
-        .send({email: credentials.email, password: credentials.password })
+        .send({nombre: credentials.nombre, apellido: credentials.apellido, email: credentials.email, password: credentials.password })
         .then(() => {
             dispatch(loginUser(credentials))
         })

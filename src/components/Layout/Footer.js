@@ -6,7 +6,7 @@ import SourceLink from 'components/SourceLink';
 
 const Footer = () => {
   return (
-    <Navbar>
+    <Navbar className="content-footer">
       <Nav navbar>
         <NavItem>
           Hecho con ❤ para  <SourceLink>Cambio Posadas</SourceLink>. <br/>

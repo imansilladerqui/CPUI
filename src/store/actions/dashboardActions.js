@@ -29,7 +29,7 @@ export const getEntidades = () => {
             })
         })
         .catch(err=>{
-            if (err.response.body.message === expiredMessage) {
+            if (err.response.body.message && (err.response.body.message === expiredMessage)) {
                 localStorage.removeItem('_token');
                 return dispatch({
                     type: 'HANDLE_ERROR_TOKEN',
@@ -57,7 +57,7 @@ export const getEntidadesHistorico = (entidadesList) => {
             })
         })
         .catch(err=>{
-            if (err.response.body.message === expiredMessage) {
+            if (err.response.body.message && (err.response.body.message === expiredMessage)) {
                 localStorage.removeItem('_token');
                 return dispatch({
                     type: 'HANDLE_ERROR_TOKEN',
@@ -80,7 +80,7 @@ export const getUser = () => {
             })
         })
         .catch(err=>{
-            if (err.response.body.message === expiredMessage) {
+            if (err.response.body.message && (err.response.body.message === expiredMessage)) {
                 localStorage.removeItem('_token');
                 return dispatch({
                     type: 'HANDLE_ERROR_TOKEN',

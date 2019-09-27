@@ -1,6 +1,12 @@
 const initState = {
     allUsuarios:[],
-    selectedUser: [],
+    selectedUser: {
+        id: '',
+        nombre: '',
+        apellido: '',
+        email: '',
+        avatar: ''
+    },
     tokenExpired: false
 }
 
@@ -15,10 +21,22 @@ const userReducer = (state = initState, action) => {
                 allUsuarios: action.usuarios
             }
 
-        case 'EDIT_USUARIO':
+        case 'GET_PROFILE':
             return {
                 ...state,
                 selectedUser: action.selectedUsuario
+            }
+
+        case 'UPDATE_PROFILE':
+            return {
+                ...state,
+                selectedUser: action.selectedUsuario
+            }
+
+        case 'UPDATE_PROFILE_STORE':
+            return {
+                ...state,
+                selectedUser: action.data
             }
 
         default:

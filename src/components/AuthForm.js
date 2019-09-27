@@ -1,4 +1,4 @@
-import {Button, Form, FormGroup, Input, Label, UncontrolledAlert} from 'reactstrap';
+import {Button, Col, Form, FormGroup, Input, Label, Row, UncontrolledAlert} from 'reactstrap';
 import {connect} from 'react-redux';
 import {loginUser, clearState, signUp} from '../store/actions/authActions';
 import {dashboardClearState} from '../store/actions/dashboardActions';
@@ -14,16 +14,23 @@ class AuthForm extends Component {
     super(props);
 
     this.state = {
-      email: '',
-      password: '',
+      apellido:'',
       confirmarPassword: '',
+      disabledButtonState: true,
+      email: '',
       errors: {
+        nombre: '',
+        apellido: '',
         email: '',
         emailCambioPosadas: '',
         password: '',
         confirmarPassword: ''
-      }
+      },
+      nombre:'',
+      password: ''
     }
+
+    this.handleChange = this.handleChange.bind(this);
   }
 
   get isLogin() {
@@ -46,6 +53,34 @@ class AuthForm extends Component {
 
     this.setState({
       [e.target.id]: e.target.value
+    }, () => {
+      switch (this.props.authState) {
+        case STATE_SIGNUP:
+          if (!this.state.errors.nombre && !this.state.errors.apellido && !this.state.errors.email && !this.state.errors.emailCambioPosadas && !this.state.errors.password && !this.state.errors.confirmarPassword && this.state.nombre && this.state.apellido && this.state.email && this.state.password && this.state.confirmarPassword) {
+            this.setState({
+              disabledButtonState: false
+            });
+          } else {
+            this.setState({
+              disabledButtonState: true
+            });
+          }
+          break;
+        
+        case STATE_LOGIN:
+          if (this.state.email && this.state.password) {
+            this.setState({
+              disabledButtonState: false
+            });
+          } else {
+            this.setState({
+              disabledButtonState: true
+            });
+          }
+          break;
+        default:
+          break;
+      }
     });
 
     let errors = this.state.errors;
@@ -93,6 +128,18 @@ class AuthForm extends Component {
 
     if(this.props.authState === STATE_SIGNUP) {
       switch (event.target.id) {
+        case 'nombre':
+          errors.nombre = 
+          event.target.value.length > 0
+              ? ''
+              : 'El campo nombre no puede quedar vacio!';
+          break;
+        case 'apellido':
+        errors.apellido = 
+        event.target.value.length > 0
+            ? ''
+            : 'El campo apellido no puede quedar vacio!';
+        break;
         case 'email':
           errors.email = 
           event.target.value.length > 0
@@ -178,49 +225,97 @@ class AuthForm extends Component {
         {loginError}
         {tokenExpired}
         <FormGroup>
-          <Label>Email</Label>
-          <Input
-            className={(this.state.email && !this.state.errors.email && !this.state.errors.emailCambioPosadas &&this.props.authState === STATE_SIGNUP) ? "is-valid form-control" : ""}
-            type="email"
-            placeholder="email"
-            id="email"
-            onChange={this.handleChange}/>
-          <div className='info'>
-            <small className="text-danger">{this.state.errors.email}</small>
-          </div>
-          <div className='info'>
-            <small className="text-danger">{this.state.errors.emailCambioPosadas}</small>
-          </div>
+          {this.isSignup && (
+            <Row>
+              <Col xs="6">
+                <Label>Nombre</Label><span className='required'>*</span>
+                <Input
+                  className={(this.state.nombre && this.props.authState === STATE_SIGNUP) ? "is-valid form-control" : ""}
+                  type="text"
+                  placeholder="Nombre"
+                  id="nombre"
+                  onChange={this.handleChange}/>
+                <div className='info'>
+                  <small className="text-danger">{this.state.errors.nombre}</small>
+                </div>
+                <div className='info'>
+                  <small className="text-danger">{this.state.errors.nombre}</small>
+                </div>
+              </Col>
+              <Col xs="6">
+                <Label>Apellido</Label><span className='required'>*</span>
+                <Input
+                  className={(this.state.apellido && this.props.authState === STATE_SIGNUP) ? "is-valid form-control" : ""}
+                  type="text"
+                  placeholder="Apellido"
+                  id="apellido"
+                  onChange={this.handleChange}/>
+                <div className='info'>
+                  <small className="text-danger">{this.state.errors.apellido}</small>
+                </div>
+                <div className='info'>
+                  <small className="text-danger">{this.state.errors.apellido}</small>
+                </div>
+              </Col>
+            </Row>
+          )}
         </FormGroup>
         <FormGroup>
-          <Label>Contraseña</Label>
-          <Input
-            className={(this.state.password && !this.state.errors.password && this.props.authState === STATE_SIGNUP) ? "is-valid form-control" : ""} 
-            type="password"
-            placeholder="contraseña"
-            id="password"
-            onChange={this.handleChange}/>
-          <div className='info'>
-            <small className="text-danger">{this.state.errors.password}</small>
-          </div>
+          <Row>
+            <Col>
+              <Label>Email</Label><span className='required'>*</span>
+              <Input
+                className={(this.state.email && !this.state.errors.email && !this.state.errors.emailCambioPosadas &&this.props.authState === STATE_SIGNUP) ? "is-valid form-control" : ""}
+                type="email"
+                placeholder="email"
+                id="email"
+                onChange={this.handleChange}/>
+              <div className='info'>
+                <small className="text-danger">{this.state.errors.email}</small>
+              </div>
+              <div className='info'>
+                <small className="text-danger">{this.state.errors.emailCambioPosadas}</small>
+              </div>
+            </Col>
+          </Row>
+        </FormGroup>
+        <FormGroup>
+          <Row>
+            <Col>
+              <Label>Contraseña</Label><span className='required'>*</span>
+              <Input
+                className={(this.state.password && !this.state.errors.password && this.props.authState === STATE_SIGNUP) ? "is-valid form-control" : ""} 
+                type="password"
+                placeholder="contraseña"
+                id="password"
+                onChange={this.handleChange}/>
+              <div className='info'>
+                <small className="text-danger">{this.state.errors.password}</small>
+              </div>
+            </Col>
+          </Row>          
         </FormGroup>
         {this.isSignup && (
-          <FormGroup>
-            <Label>Confirmar Contraseña</Label>
-            <Input
-              className={(!this.state.errors.confirmarPassword && this.state.confirmarPassword && this.props.authState === STATE_SIGNUP) ? "is-valid form-control" : ""}
-              type="password"
-              placeholder="Confirmar contraseña"
-              id="confirmarPassword"
-              onChange={this.handleChange}/>
-            <div className='info'>
-              <small className="text-danger">{this.state.errors.confirmarPassword}</small>
-            </div>
-          </FormGroup>
+          <Row>
+            <Col>
+              <FormGroup>
+                <Label>Confirmar Contraseña</Label><span className='required'>*</span>
+                <Input
+                  className={(!this.state.errors.confirmarPassword && this.state.confirmarPassword && this.props.authState === STATE_SIGNUP) ? "is-valid form-control" : ""}
+                  type="password"
+                  placeholder="Confirmar contraseña"
+                  id="confirmarPassword"
+                  onChange={this.handleChange}/>
+                <div className='info'>
+                  <small className="text-danger">{this.state.errors.confirmarPassword}</small>
+                </div>
+              </FormGroup>
+            </Col>
+          </Row>
         )}
         <Button
           size="lg"
-          className="bg-gradient-theme-left border-0 mt-5"
+          className={`bg-gradient-theme-left border-0 mt-5 ${(this.state.disabledButtonState) ? 'disabled' : ''}`}
           block
           onClick={this.handleSubmit}>
           {this.renderButtonText()}
