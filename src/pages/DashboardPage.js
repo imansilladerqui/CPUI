@@ -1,6 +1,6 @@
 import {connect} from 'react-redux';
-import {getEntidades, getEntidadesHistorico} from '../store/actions/dashboardActions';
-import {NumberCotizaciones, IconsCotizaciones} from 'components/Widget';
+import {getEntidadesHistorico} from '../store/actions/dashboardActions';
+import {NumberCotizaciones, ResumenCotizaciones} from 'components/Widget';
 import Page from 'components/Page';
 import React from 'react';
 import {Redirect} from 'react-router-dom';
@@ -26,11 +26,9 @@ const entidadesList = [
 class DashboardPage extends React.Component {
 
   componentDidMount() {
-    this.props.getEntidades();
     for(let i=0; i < entidadesList.length; i++) {
       this.props.getEntidadesHistorico(entidadesList[i]);
-    }
-    setInterval(() => this.props.getEntidades(), 3600000);
+    };
     setInterval(() => {
       for(let i=0; i < entidadesList.length; i++) {
         this.props.getEntidadesHistorico(entidadesList[i]);
@@ -39,8 +37,7 @@ class DashboardPage extends React.Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    if (this.props.entidades !== nextProps.entidades ||
-        this.props.alpe !== nextProps.alpe ||
+    if (this.props.alpe !== nextProps.alpe ||
         this.props.columbia !== nextProps.columbia ||
         this.props.frances !== nextProps.frances ||
         this.props.galicia !== nextProps.galicia ||
@@ -68,16 +65,27 @@ class DashboardPage extends React.Component {
       return <Redirect to="/"/>
     }
 
-    let ultimasDosRuedas = [];
+    let cotizacionesEntidadComparacion = [];
 
-    ultimasDosRuedas.push(this.props.alpe.slice(0, 2), this.props.columbia.slice(0, 2), this.props.frances.slice(0, 2), this.props.galicia.slice(0, 2), this.props.icbc.slice(0, 2), this.props.maguitur.slice(0, 2), this.props.maxinta.slice(0, 2), this.props.montevideo.slice(0, 2), this.props.nacion.slice(0, 2), this.props.patagonia.slice(0, 2), this.props.provincia.slice(0, 2), this.props.santander.slice(0, 2), this.props.supervielle.slice(0, 2), this.props.vaccaro.slice(0, 2));
+    cotizacionesEntidadComparacion.push(this.props.alpe.slice(0, 2), this.props.columbia.slice(0, 2), this.props.frances.slice(0, 2), this.props.galicia.slice(0, 2), this.props.icbc.slice(0, 2), this.props.maguitur.slice(0, 2), this.props.maxinta.slice(0, 2), this.props.montevideo.slice(0, 2), this.props.nacion.slice(0, 2), this.props.patagonia.slice(0, 2), this.props.provincia.slice(0, 2), this.props.santander.slice(0, 2), this.props.supervielle.slice(0, 2), this.props.vaccaro.slice(0, 2));
 
-    if (Object.entries(this.props.entidades).length !== 0 && this.props.vaccaro.length > 0 && this.props.supervielle.length > 0 && this.props.santander.length > 0 && this.props.provincia.length > 0 && this.props.patagonia.length > 0 && this.props.nacion.length > 0 && this.props.montevideo.length > 0 && this.props.maxinta.length > 0 && this.props.maguitur.length > 0 && this.props.icbc.length > 0 && this.props.galicia.length > 0 && this.props.frances.length > 0 && this.props.columbia.length > 0 && this.props.alpe.length > 0) {
-      iconCotizaciones = (<IconsCotizaciones entidades={Object.values(this.props.entidades)}/>);
-      numberCotizaciones = (<NumberCotizaciones ultimasDosRuedas={ultimasDosRuedas}/>);
+
+    let todasLasEntidades = [];
+
+    todasLasEntidades.push(this.props.alpe[0], this.props.columbia[0], this.props.frances[0],this.props.galicia[0], this.props.icbc[0], this.props.maguitur[0], this.props.maxinta[0], this.props.montevideo[0], this.props.nacion[0], this.props.patagonia[0], this.props.provincia[0], this.props.santander[0], this.props.supervielle[0], this.props.vaccaro[0]);
+
+    if (todasLasEntidades.length > 0 && this.props.vaccaro.length > 0 && this.props.supervielle.length > 0 && this.props.santander.length > 0 && this.props.provincia.length > 0 && this.props.patagonia.length > 0 && this.props.nacion.length > 0 && this.props.montevideo.length > 0 && this.props.maxinta.length > 0 && this.props.maguitur.length > 0 && this.props.icbc.length > 0 && this.props.galicia.length > 0 && this.props.frances.length > 0 && this.props.columbia.length > 0 && this.props.alpe.length > 0) {
+      iconCotizaciones = (
+        <ResumenCotizaciones 
+          entidades={todasLasEntidades}
+        />
+      );
+      numberCotizaciones = (
+        <NumberCotizaciones 
+          cotizacionesEntidadComparacion={cotizacionesEntidadComparacion}
+        />
+      );
     }
-
-
 
     return (
       <Page
@@ -95,7 +103,6 @@ const mapStatetoProps = (state) => {
   return {
     alpe: state.dashboard.alpe,
     columbia: state.dashboard.columbia,
-    entidades: state.dashboard.entidades,
     frances: state.dashboard.frances,
     galicia: state.dashboard.galicia,
     icbc: state.dashboard.icbc,
@@ -114,7 +121,6 @@ const mapStatetoProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getEntidades: () => dispatch(getEntidades()),
     getEntidadesHistorico: (entidadesList) => dispatch(getEntidadesHistorico(entidadesList))
   }
 }

@@ -263,7 +263,7 @@ class AuthForm extends Component {
         <FormGroup>
           <Row>
             <Col>
-              <Label>Email</Label><span className='required'>*</span>
+              <Label>Email</Label>{(this.isSignup)?<span className='required'>*</span>:''}
               <Input
                 className={(this.state.email && !this.state.errors.email && !this.state.errors.emailCambioPosadas &&this.props.authState === STATE_SIGNUP) ? "is-valid form-control" : ""}
                 type="email"
@@ -282,7 +282,7 @@ class AuthForm extends Component {
         <FormGroup>
           <Row>
             <Col>
-              <Label>Contraseña</Label><span className='required'>*</span>
+              <Label>Contraseña</Label>{(this.isSignup)?<span className='required'>*</span>:''}
               <Input
                 className={(this.state.password && !this.state.errors.password && this.props.authState === STATE_SIGNUP) ? "is-valid form-control" : ""} 
                 type="password"

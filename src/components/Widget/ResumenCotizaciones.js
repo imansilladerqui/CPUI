@@ -1,51 +1,49 @@
 import {CardGroup, Row, Col} from 'reactstrap';
-import {IconWidget} from 'components/Widget';
+import {ResumenWidget} from 'components/Widget';
 import PropTypes from 'utils/propTypes';
 import React from 'react';
-import {MdThumbUp} from 'react-icons/lib/md';
 
-const IconsCotizaciones = ({
+const ResumenCotizaciones = ({
     entidades
   }) => {
 
 
-    let dataCompraAlta;
-    let resultadoCompraAlta = 0;
+    let dataCompraMayor;
+    let resultadoCompraMayor = 0;
     for(let i=0; i < entidades.length; i++) {
-      if(parseFloat(entidades[i].compra).toFixed(2) > resultadoCompraAlta) {
-        resultadoCompraAlta = parseFloat(entidades[i].compra).toFixed(2);
-        dataCompraAlta=entidades[i];
+      if(parseFloat(entidades[i].compra).toFixed(2) > resultadoCompraMayor) {
+        resultadoCompraMayor = parseFloat(entidades[i].compra).toFixed(2);
+        dataCompraMayor=entidades[i];
       }
     }
 
-
-    let dataCompraBaja;
-    let resultadoCompraBaja = parseFloat(entidades[0].compra).toFixed(2);
+    let dataCompraMenor;
+    let resultadoCompraMenor = parseFloat(entidades[0].compra).toFixed(2);
     
     for(let i=0; i < entidades.length; i++) {
-      if(parseFloat(entidades[i].compra).toFixed(2) <= resultadoCompraBaja) {
-        resultadoCompraBaja = parseFloat(entidades[i].compra).toFixed(2)
-        dataCompraBaja = entidades[i];
+      if(parseFloat(entidades[i].compra).toFixed(2) <= resultadoCompraMenor) {
+        resultadoCompraMenor = parseFloat(entidades[i].compra).toFixed(2)
+        dataCompraMenor = entidades[i];
       }
     }
 
-    let dataVentaAlta;
-    let resultadoVentaAlta = 0;
+    let dataVentaMayor;
+    let resultadoVentaMayor = 0;
     
     for(let i=0; i < entidades.length; i++) {
-      if(parseFloat(entidades[i].venta).toFixed(2) > resultadoVentaAlta) {
-        resultadoVentaAlta = parseFloat(entidades[i].venta).toFixed(2);
-        dataVentaAlta=entidades[i];
+      if(parseFloat(entidades[i].venta).toFixed(2) > resultadoVentaMayor) {
+        resultadoVentaMayor = parseFloat(entidades[i].venta).toFixed(2);
+        dataVentaMayor=entidades[i];
       }
     }
 
-    let dataVentaBaja;
-    let resultadoVentaBaja = parseFloat(entidades[0].venta).toFixed(2);
+    let dataVentaMenor;
+    let resultadoVentaMenor = parseFloat(entidades[0].venta).toFixed(2);
 
     for(let i=0; i < entidades.length; i++) {
-      if(parseFloat(entidades[i].venta).toFixed(2) <= resultadoVentaBaja) {
-        resultadoVentaBaja = parseFloat(entidades[i].venta).toFixed(2)
-        dataVentaBaja = entidades[i];
+      if(parseFloat(entidades[i].venta).toFixed(2) <= resultadoVentaMenor) {
+        resultadoVentaMenor = parseFloat(entidades[i].venta).toFixed(2)
+        dataVentaMenor = entidades[i];
       }
     }
     
@@ -91,28 +89,25 @@ const IconsCotizaciones = ({
       <Col lg="12" md="12" sm="12" xs="12">
         <CardGroup style={ {marginTop: '2rem' }}
         lg={3} md={3} sm={12} xs={12}>
-          <IconWidget
+          <ResumenWidget
             bgColor="white"
             inverse={false}
-            icon={MdThumbUp}
             subtitle="Mayor precio de compra"
-            entidad={dataCompraAlta.entidad}
-            valor={`$ ${dataCompraAlta.compra}`}
-            logo={dataCompraAlta.entidad === 'Montevideo' ||  dataCompraAlta.entidad === 'Vaccaro' ? '' : dataCompraAlta.logo}
+            entidad={dataCompraMayor.entidad}
+            valor={`$ ${dataCompraMayor.compra}`}
+            logo={dataCompraMayor.entidad === 'Montevideo' ||  dataCompraMayor.entidad === 'Vaccaro' ? '' : dataCompraMayor.logo}
           />
-          <IconWidget
+          <ResumenWidget
             bgColor="white"
             inverse={false}
-            icon={MdThumbUp}
             subtitle="Mayor precio de venta"
-            entidad={dataVentaAlta.entidad}
-            valor={`$ ${dataVentaAlta.venta}`}
-            logo={dataVentaAlta.entidad === 'Montevideo' ||  dataVentaAlta.entidad === 'Vaccaro' ? '' : dataVentaAlta.logo}
+            entidad={dataVentaMayor.entidad}
+            valor={`$ ${dataVentaMayor.venta}`}
+            logo={dataVentaMayor.entidad === 'Montevideo' ||  dataVentaMayor.entidad === 'Vaccaro' ? '' : dataVentaMayor.logo}
           />
-          <IconWidget
+          <ResumenWidget
             bgColor="white"
             inverse={false}
-            icon={MdThumbUp}
             subtitle="Mayor spread entre precios"
             entidad={dataMayorSpread.entidad}
             valor={`$ ${resultadoMayorSpread}`}
@@ -121,28 +116,25 @@ const IconsCotizaciones = ({
         </CardGroup>
         <CardGroup style={ { marginBottom: '2rem'}}
           lg={3} md={3} sm={12} xs={12}>
-          <IconWidget
+          <ResumenWidget
             bgColor="white"
             inverse={false}
-            icon={MdThumbUp}
             subtitle="Menor precio de compra"
-            entidad={dataCompraBaja.entidad}
-            valor={`$ ${dataCompraBaja.compra}`}
-            logo={dataCompraBaja.entidad === 'Montevideo' ||  dataCompraBaja.entidad === 'Vaccaro' ? '' : dataCompraBaja.logo}
+            entidad={dataCompraMenor.entidad}
+            valor={`$ ${dataCompraMenor.compra}`}
+            logo={dataCompraMenor.entidad === 'Montevideo' ||  dataCompraMenor.entidad === 'Vaccaro' ? '' : dataCompraMenor.logo}
           />
-          <IconWidget
+          <ResumenWidget
             bgColor="white"
             inverse={false}
-            icon={MdThumbUp}
             subtitle="Menor precio de venta"
-            entidad={dataVentaBaja.entidad}
-            valor={`$ ${dataVentaBaja.venta}`}
-            logo={dataVentaBaja.entidad === 'Montevideo' ||  dataVentaBaja.entidad === 'Vaccaro' ? '' : dataVentaBaja.logo}
+            entidad={dataVentaMenor.entidad}
+            valor={`$ ${dataVentaMenor.venta}`}
+            logo={dataVentaMenor.entidad === 'Montevideo' ||  dataVentaMenor.entidad === 'Vaccaro' ? '' : dataVentaMenor.logo}
           />
-          <IconWidget
+          <ResumenWidget
             bgColor="white"
             inverse={false}
-            icon={MdThumbUp}
             subtitle="Menor spread entre precios"
             entidad={dataMenorSpread.entidad}
             valor={`$ ${resultadoMenorSpread}`}
@@ -154,8 +146,8 @@ const IconsCotizaciones = ({
     
   );
 }
-IconsCotizaciones.propTypes = {
+ResumenCotizaciones.propTypes = {
   entidades: PropTypes.array
 };
 
-export default IconsCotizaciones;
+export default ResumenCotizaciones;

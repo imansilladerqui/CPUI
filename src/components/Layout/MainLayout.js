@@ -1,9 +1,6 @@
 import {Content, Footer, Header, Sidebar} from 'components/Layout';
 import {connect} from 'react-redux';
 import {getUser} from '../../store/actions/dashboardActions';
-import {MdInfoOutline, MdEqualizer} from 'react-icons/lib/md';
-import NotificationSystem from 'react-notification-system';
-import {NOTIFICATION_SYSTEM_STYLE} from 'utils/constants';
 import React from 'react';
 
 class MainLayout extends React.Component {
@@ -24,38 +21,7 @@ class MainLayout extends React.Component {
     this.props.getUser();    
   }
 
-  componentDidUpdate(nextProps) {
-    if (nextProps.user !== this.props.user) {
-      setTimeout(() => {
-        if (!this.notificationSystem) {
-          return;
-        }
-
-        this.notificationSystem.addNotification({
-          title: <MdInfoOutline />,
-          message: `Bienvenido ${this.props.user.nombre}, al panel de control de Cambio Posadas!`,
-          level: 'info',
-        });
-      }, 1500);
-
-      setTimeout(() => {
-        if (!this.notificationSystem) {
-          return;
-        }
-
-        this.notificationSystem.addNotification({
-          title: <MdEqualizer />,
-          message:
-            'Desde aquí podrás monitorear las cotizaciones del mercado',
-          level: 'info',
-        });
-      }, 2500);
-    }
-  }
-
-  // close sidebar when
   handleContentClick = event => {
-    // close sidebar if sidebar is open and screen size is less than `md`
     if (
       MainLayout.isSidebarOpen() &&
       (this.props.breakpoint === 'xs' ||
@@ -99,15 +65,6 @@ class MainLayout extends React.Component {
           {children}
           <Footer />
         </Content>
-
-        <NotificationSystem
-          dismissible={false}
-          ref={notificationSystem =>
-            (this.notificationSystem = notificationSystem)
-          }
-          style={NOTIFICATION_SYSTEM_STYLE}
-          user={this.props.user}
-        />
       </main>
     );
   }

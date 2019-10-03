@@ -10,35 +10,6 @@ export const dashboardClearState = () => {
     }
 }
 
-export const getEntidades = () => {
-
-    return dispatch => {
-        Request
-        .get('https://protected-mountain-77919.herokuapp.com/api/entidadesAll')
-        .set({'authorization': 'Bearer ' + localStorage.getItem('_token')})
-        .accept('application/json')
-        .then(res=>{
-            let entidades = Object.values(res.body);
-            for(let i=0; i<entidades.length; i++) {
-                entidades[i].logo = `/entidades/${entidades[i].entidad}.png`;
-            }
-        
-            dispatch({
-                type: 'GET_ENTIDADES',
-                entidades: entidades
-            })
-        })
-        .catch(err=>{
-            if (err.response.body.message && (err.response.body.message === expiredMessage)) {
-                localStorage.removeItem('_token');
-                return dispatch({
-                    type: 'HANDLE_ERROR_TOKEN',
-                })
-            }
-        })
-    }
-}
-
 export const getEntidadesHistorico = (entidadesList) => {
     return dispatch => {
         Request

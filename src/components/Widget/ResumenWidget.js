@@ -3,10 +3,9 @@ import classNames from 'classnames';
 import PropTypes from 'utils/propTypes';
 import React from 'react';
 
-const IconWidget = ({
+const ResumenWidget = ({
   bgColor,
   entidad,
-  icon: Icon,
   iconProps,
   logo,
   subtitle,
@@ -25,7 +24,6 @@ const IconWidget = ({
     )
   } else {
     entidadHeader = entidad
-    // entidadHeader =  <Icon size={50} {...iconProps} />
   }
   const classes = classNames('cr-widget', className, {
     [`bg-${bgColor}`]: bgColor,
@@ -41,17 +39,15 @@ const IconWidget = ({
   );
 };
 
-IconWidget.propTypes = {
+ResumenWidget.propTypes = {
   bgColor: PropTypes.string,
-  icon: PropTypes.component,
   iconProps: PropTypes.object,
   subtitle: PropTypes.string,
 };
 
-IconWidget.defaultProps = {
+ResumenWidget.defaultProps = {
   bgColor: 'primary',
-  icon: 'span',
   iconProps: { size: 50 },
 };
 
-export default IconWidget;
+export default ResumenWidget;

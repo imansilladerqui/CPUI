@@ -2,7 +2,6 @@ const initState = {
     allUsuarios:[],
     alpe:[],
     columbia: [],
-    entidades:[],
     frances: [],
     galicia:[],
     icbc:[],
@@ -23,12 +22,6 @@ const dashboardReducer = (state = initState, action) => {
     switch (action.type) {
         case 'CLEAR_STATE':
             return initState
-
-        case 'GET_ENTIDADES': 
-            return {
-                ...state,
-                entidades: action.entidades
-            }
 
         case 'GET_ENTIDADES_HISTORICO':
             return {
