@@ -11,7 +11,7 @@ class NumberCotizaciones extends Component {
         let cotizacionEntidadComparacionWidget = this.props.cotizacionesEntidadComparacion.map((data, i)=>{
             let iconCompra, iconVenta, colorCompra, colorVenta;
             let spread = data[0].venta - data[0].compra;
-    
+
             if (data[0].venta > data[1].venta) {
                 iconCompra = <MdArrowUpward/>;
                 colorVenta = 'success';
@@ -22,7 +22,7 @@ class NumberCotizaciones extends Component {
                 iconCompra = <MdCompareArrows/>;
                 colorVenta = 'muted';
             }
-    
+
             if(data[0].compra > data[1].compra) {
                 iconVenta = <MdArrowUpward/>;
                 colorCompra = 'success';
@@ -32,8 +32,10 @@ class NumberCotizaciones extends Component {
             } else {
                 iconVenta = <MdCompareArrows/>;
                 colorCompra = 'muted';
-            }        
-    
+            }
+
+            let historico = (data[0].entidad.toLowerCase()==='bapro') ? this.props.provincia : this.props[data[0].entidad.toLowerCase()];
+
             return (
                 <Col key={i} lg={6} md={6} sm={12} xs={12}>
                     <EntidadWidget
@@ -49,7 +51,7 @@ class NumberCotizaciones extends Component {
                         colorventa = {colorVenta}
                         iconcompra = {iconCompra}
                         iconventa = {iconVenta}
-                        historico = {this.props[data[0].entidad.toLowerCase()]}
+                        historico = {historico}
                     />
                 </Col>
             );
@@ -82,6 +84,6 @@ const mapStatetoProps = (state) => {
         vaccaro: state.dashboard.vaccaro,
     }
 }
-  
+
 export default connect(mapStatetoProps, {})(NumberCotizaciones);
 

@@ -2,60 +2,45 @@ import {Card} from 'reactstrap';
 import {getColor} from 'utils/colors';
 import React, {Component} from 'react';
 import {Line} from 'react-chartjs-2';
-import random from 'faker/lib/random';
-
-const randomNum = (min = 0, max = 1000) => {
-  return random().number({ min, max });
-};
 
 class EntidadHistorico extends Component {
 
-  genLineData = (dataCompra = {}, dataVenta = {}) => {
-    console.log(this.props.historico);
-    const MESES = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Julio'];
+  genLineData = () => {
+    let datasetCompra = [], datasetVenta = [], datasetFechas = [];
+
+    this.props.historico.map((data)=>{
+        datasetFechas.push(data.dia);
+        datasetCompra.push(data.compra);
+        datasetVenta.push(data.venta);
+    });
+
     return {
-      labels: MESES,
+      labels: datasetFechas.reverse(),
       datasets: [
         {
           label: 'Compra',
           backgroundColor: getColor('primary'),
           borderColor: getColor('primary'),
           borderWidth: 1,
-          data: [
-            randomNum(),
-            randomNum(),
-            randomNum(),
-            randomNum(),
-            randomNum(),
-            randomNum(),
-            randomNum(),
-          ],
-          ...dataCompra,
+          data: datasetCompra.reverse(),
+          fill: false,
         },
         {
           label: 'Venta',
           backgroundColor: getColor('secondary'),
           borderColor: getColor('secondary'),
           borderWidth: 1,
-          data: [
-            randomNum(),
-            randomNum(),
-            randomNum(),
-            randomNum(),
-            randomNum(),
-            randomNum(),
-            randomNum(),
-          ],
-          ...dataVenta,
+          data: datasetVenta.reverse(),
+          fill: false,
         },
-      ],
+      ]
     };
   };
 
   render() {
     return (
       <Card className="card-side side-back">
-        <Line data={this.genLineData({ fill: false }, { fill: false })} />
+        <Line data={this.genLineData()} />
       </Card>
     );
   }

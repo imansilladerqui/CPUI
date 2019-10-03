@@ -33,7 +33,7 @@ class DashboardPage extends React.Component {
       for(let i=0; i < entidadesList.length; i++) {
         this.props.getEntidadesHistorico(entidadesList[i]);
       }
-    }, 3600000);
+    }, 60000);
   }
 
   shouldComponentUpdate(nextProps) {
@@ -76,12 +76,12 @@ class DashboardPage extends React.Component {
 
     if (todasLasEntidades.length > 0 && this.props.vaccaro.length > 0 && this.props.supervielle.length > 0 && this.props.santander.length > 0 && this.props.provincia.length > 0 && this.props.patagonia.length > 0 && this.props.nacion.length > 0 && this.props.montevideo.length > 0 && this.props.maxinta.length > 0 && this.props.maguitur.length > 0 && this.props.icbc.length > 0 && this.props.galicia.length > 0 && this.props.frances.length > 0 && this.props.columbia.length > 0 && this.props.alpe.length > 0) {
       iconCotizaciones = (
-        <ResumenCotizaciones 
+        <ResumenCotizaciones
           entidades={todasLasEntidades}
         />
       );
       numberCotizaciones = (
-        <NumberCotizaciones 
+        <NumberCotizaciones
           cotizacionesEntidadComparacion={cotizacionesEntidadComparacion}
         />
       );

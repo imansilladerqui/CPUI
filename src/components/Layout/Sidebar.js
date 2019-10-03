@@ -41,22 +41,24 @@ class Sidebar extends React.Component {
 
   render() {
     let navItems = [];
-    
+
     switch(this.props.user.roleName) {
       case 'user':
         navItems = navItemsUser;
         break
-      case 'admin': 
-        navItems = navItemsAdmin;
+      case 'admin':
+        // navItems = navItemsAdmin;
+        navItems = navItemsUser;
         break
       case 'owner':
-        navItems = navItemsOwner;
+        // navItems = navItemsOwner;
+        navItems = navItemsUser;
         break;
-      default: 
+      default:
         navItems = navItemsUser;
         break;
     }
- 
+
     return (
       <aside className={bem.b()} id="sidebar">
         <div className={bem.e('background')}/>

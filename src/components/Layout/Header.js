@@ -1,7 +1,7 @@
 
 import Avatar from 'components/Avatar';
 import bn from 'utils/bemnames';
-import {MdPersonPin, MdClearAll, MdExitToApp} from 'react-icons/lib/md';
+import {MdClearAll, MdExitToApp} from 'react-icons/lib/md';
 import {Navbar, Nav, NavItem, NavLink, Popover, PopoverBody, ListGroup, ListGroupItem, Button} from 'reactstrap';
 import React, {Component} from 'react';
 import {UserCard} from 'components/Card';
@@ -68,7 +68,7 @@ class Header extends Component {
               target="Popover2"
               className="p-0 border-0"
               style={{ minWidth: 250 }}>
-              <PopoverBody className="p-0 border-light">
+              <PopoverBody className="p-0 border-light shadow-lg">
                 <UserCard
                   avatar={this.props.user.avatar}
                   title={`${this.props.user.nombre} ${this.props.user.apellido}`}
@@ -76,9 +76,9 @@ class Header extends Component {
                   text={`Last updated: ${this.props.user.updated_at}`}
                   className="border-light">
                   <ListGroup flush>
-                    <ListGroupItem tag="a" action href={`/user/${this.props.user.id}`} className="border-light">
+                    {/* <ListGroupItem tag="a" action href={`/user/${this.props.user.id}`} className="border-light">
                         <MdPersonPin /> Perfil
-                    </ListGroupItem>
+                    </ListGroupItem> */}
                     <ListGroupItem tag="button" action onClick={this.handleLogOut} className="border-light">
                       <MdExitToApp /> Salir
                     </ListGroupItem>
