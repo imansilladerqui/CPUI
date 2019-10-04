@@ -12,7 +12,8 @@ const initState = {
     patagonia:[],
     provincia:[],
     santander:[],
-    supervielle: [],  
+    showPreloader: false,
+    supervielle: [],
     tokenExpired: false,
     user:[],
     vaccaro:[]
@@ -23,13 +24,25 @@ const dashboardReducer = (state = initState, action) => {
         case 'CLEAR_STATE':
             return initState
 
+        case 'SHOW_PRELOADER':
+            return {
+                ...state,
+                showPreloader: true
+            }
+
+        case 'HIDE_PRELOADER':
+            return {
+                ...state,
+                showPreloader: false
+            }
+
         case 'GET_ENTIDADES_HISTORICO':
             return {
                 ...state,
                 [action.entidadesNombre]: action.entidadesHistorico
             }
 
-        case 'GET_USER': 
+        case 'GET_USER':
             return {
                 ...state,
                 user: action.user

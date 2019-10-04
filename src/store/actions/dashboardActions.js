@@ -12,29 +12,39 @@ export const dashboardClearState = () => {
 
 export const getEntidadesHistorico = (entidadesList) => {
     return dispatch => {
-        Request
-        .get(`https://protected-mountain-77919.herokuapp.com/api/${entidadesList}`)
-        .set({'authorization': 'Bearer ' + localStorage.getItem('_token')})
-        .accept('application/json')
-        .then(res=>{
-            let entidades = Object.values(res.body);
-            for(let i=0; i<entidades.length; i++) {
-                entidades[i].logo = `/entidades/${entidades[i].entidad}.png`;
-            }
-            dispatch({
-                type: 'GET_ENTIDADES_HISTORICO',
-                entidadesNombre: entidadesList,
-                entidadesHistorico: entidades
+        dispatch({
+            type: 'SHOW_PRELOADER'
+        })
+        let promises = entidadesList.map((data)=> {
+            return Request
+            .get(`https://protected-mountain-77919.herokuapp.com/api/${data}`)
+            .set({'authorization': 'Bearer ' + localStorage.getItem('_token')})
+            .accept('application/json')
+            .then(res=>{
+                let entidades = Object.values(res.body);
+                for(let i=0; i<entidades.length; i++) {
+                    entidades[i].logo = `/entidades/${entidades[i].entidad}.png`;
+                }
+                dispatch({
+                    type: 'GET_ENTIDADES_HISTORICO',
+                    entidadesNombre: data,
+                    entidadesHistorico: entidades
+                })
+            })
+            .catch(err=>{
+                if (err.response.body.message && (err.response.body.message === expiredMessage)) {
+                    localStorage.removeItem('_token');
+                    return dispatch({
+                        type: 'HANDLE_ERROR_TOKEN',
+                    })
+                }
             })
         })
-        .catch(err=>{
-            if (err.response.body.message && (err.response.body.message === expiredMessage)) {
-                localStorage.removeItem('_token');
-                return dispatch({
-                    type: 'HANDLE_ERROR_TOKEN',
-                })
-            }
-        })
+        Promise.all(promises).then(() => {
+            dispatch({
+                type: 'HIDE_PRELOADER'
+            })
+        });
     }
 }
 

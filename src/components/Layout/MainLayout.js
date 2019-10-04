@@ -1,6 +1,7 @@
 import {Content, Footer, Header, Sidebar} from 'components/Layout';
 import {connect} from 'react-redux';
 import {getUser} from '../../store/actions/dashboardActions';
+import Preloader from '../../common/preloader/Preloader';
 import React from 'react';
 
 class MainLayout extends React.Component {
@@ -18,7 +19,7 @@ class MainLayout extends React.Component {
 
   componentDidMount() {
     this.checkBreakpoint(this.props.breakpoint);
-    this.props.getUser();    
+    this.props.getUser();
   }
 
   handleContentClick = event => {
@@ -57,8 +58,15 @@ class MainLayout extends React.Component {
 
   render() {
     const {children} = this.props;
+    let showPreloader;
+
+    if (this.props.showPreloader) {
+        showPreloader = <Preloader/>;
+    }
+
     return (
       <main className="cr-app bg-light">
+        {showPreloader}
         <Sidebar user={this.props.user}/>
         <Content fluid onClick={this.handleContentClick}>
           <Header user={this.props.user}/>
@@ -72,7 +80,8 @@ class MainLayout extends React.Component {
 
 const mapStatetoProps = (state) => {
   return {
-    user: state.dashboard.user
+    user: state.dashboard.user,
+    showPreloader: state.dashboard.showPreloader
   }
 }
 

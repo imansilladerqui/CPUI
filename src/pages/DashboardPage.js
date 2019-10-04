@@ -26,14 +26,14 @@ const entidadesList = [
 class DashboardPage extends React.Component {
 
   componentDidMount() {
-    for(let i=0; i < entidadesList.length; i++) {
-      this.props.getEntidadesHistorico(entidadesList[i]);
-    };
-    setInterval(() => {
-      for(let i=0; i < entidadesList.length; i++) {
-        this.props.getEntidadesHistorico(entidadesList[i]);
-      }
-    }, 60000);
+    // for(let i=0; i < entidadesList.length; i++) {
+      this.props.getEntidadesHistorico(entidadesList);
+    // };
+    // setInterval(() => {
+    //   for(let i=0; i < entidadesList.length; i++) {
+    //     this.props.getEntidadesHistorico(entidadesList[i]);
+    //   }
+    // }, 60000);
   }
 
   shouldComponentUpdate(nextProps) {

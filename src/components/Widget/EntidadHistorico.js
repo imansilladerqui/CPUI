@@ -15,32 +15,38 @@ class EntidadHistorico extends Component {
     });
 
     return {
-      labels: datasetFechas.reverse(),
-      datasets: [
+    labels: datasetFechas.reverse(),
+    datasets: [
         {
-          label: 'Compra',
-          backgroundColor: getColor('primary'),
-          borderColor: getColor('primary'),
-          borderWidth: 1,
-          data: datasetCompra.reverse(),
-          fill: false,
+            label: 'Compra',
+            backgroundColor: getColor('primary'),
+            borderColor: getColor('primary'),
+            borderWidth: 1,
+            data: datasetCompra.reverse(),
+            fill: false,
         },
         {
-          label: 'Venta',
-          backgroundColor: getColor('secondary'),
-          borderColor: getColor('secondary'),
-          borderWidth: 1,
-          data: datasetVenta.reverse(),
-          fill: false,
+            label: 'Venta',
+            backgroundColor: getColor('secondary'),
+            borderColor: getColor('secondary'),
+            borderWidth: 1,
+            data: datasetVenta.reverse(),
+            fill: false,
         },
-      ]
-    };
+    ]};
   };
 
   render() {
+    let options = {
+        scales: {
+            xAxes: [{
+                display: false
+            }],
+        }
+    };
     return (
       <Card className="card-side side-back">
-        <Line data={this.genLineData()} />
+        <Line data={this.genLineData()} options={options}/>
       </Card>
     );
   }

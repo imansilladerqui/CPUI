@@ -17,13 +17,11 @@ class Preloader extends React.Component {
                     position: 'absolute',
                     left: '50%',
                 }}>
-                    <Spinner animation="border" role="status" style={{ width: '3rem', height: '3rem' }}>
-                        <span className="sr-only">Loading...</span>
-                    </Spinner>
+                    <Spinner animation="border" role="status" style={{ width: '3rem', height: '3rem' }}/>
                 </div>
             </div>
         );
     }
 }
-  
+
   export default Preloader;
