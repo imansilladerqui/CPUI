@@ -13,24 +13,24 @@ class NumberCotizaciones extends Component {
             let spread = data[0].venta - data[0].compra;
 
             if (data[0].venta > data[1].venta) {
-                iconCompra = <MdArrowUpward/>;
+                iconVenta = <MdArrowUpward/>;
                 colorVenta = 'success';
             } else if (data[0].venta < data[1].venta) {
-                iconCompra = <MdArrowDownward/>;
+                iconVenta = <MdArrowDownward/>;
                 colorVenta = 'danger';
             } else {
-                iconCompra = <MdCompareArrows/>;
+                iconVenta = <MdCompareArrows/>;
                 colorVenta = 'muted';
             }
 
             if(data[0].compra > data[1].compra) {
-                iconVenta = <MdArrowUpward/>;
+                iconCompra = <MdArrowUpward/>;
                 colorCompra = 'success';
             } else if (data[0].compra < data[1].compra) {
-                iconVenta = <MdArrowDownward/>;
+                iconCompra = <MdArrowDownward/>;
                 colorCompra = 'danger';
             } else {
-                iconVenta = <MdCompareArrows/>;
+                iconCompra = <MdCompareArrows/>;
                 colorCompra = 'muted';
             }
 
