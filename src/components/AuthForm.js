@@ -48,7 +48,7 @@ class AuthForm extends Component {
   };
 
   handleChange = (e)=> {
-    const validEmailRegex = 
+    const validEmailRegex =
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
     this.setState({
@@ -66,7 +66,7 @@ class AuthForm extends Component {
             });
           }
           break;
-        
+
         case STATE_LOGIN:
           if (this.state.email && this.state.password) {
             this.setState({
@@ -89,24 +89,24 @@ class AuthForm extends Component {
       switch (e.target.id) {
         case 'email':
           let emailCambioPosadas = e.target.value.split('@');
-          errors.email = 
+          errors.email =
           validEmailRegex.test(e.target.value)
               ? ''
               : 'Email no es valido!';
 
-          errors.emailCambioPosadas = 
-          emailCambioPosadas[1] === 'cambioposadas.com.ar' 
+          errors.emailCambioPosadas =
+          emailCambioPosadas[1] === 'cambioposadas.com.ar'
               ? ''
               : 'Este no es un mail de Cambio Posadas';
           break;
-        case 'password': 
-          errors.password = 
+        case 'password':
+          errors.password =
             e.target.value.length < 8
               ? 'La contraseña debe tener al menos 8 caracteres'
               : '';
           break;
         case 'confirmarPassword':
-          errors.confirmarPassword = 
+          errors.confirmarPassword =
             (e.target.value !== this.state.password)
               ? 'No coinciden las contraseñas'
               : '';
@@ -129,25 +129,25 @@ class AuthForm extends Component {
     if(this.props.authState === STATE_SIGNUP) {
       switch (event.target.id) {
         case 'nombre':
-          errors.nombre = 
+          errors.nombre =
           event.target.value.length > 0
               ? ''
               : 'El campo nombre no puede quedar vacio!';
           break;
         case 'apellido':
-        errors.apellido = 
+        errors.apellido =
         event.target.value.length > 0
             ? ''
             : 'El campo apellido no puede quedar vacio!';
         break;
         case 'email':
-          errors.email = 
+          errors.email =
           event.target.value.length > 0
               ? ''
               : 'El campo email no puede quedar vacio!';
           break;
-        case 'password': 
-          errors.password = 
+        case 'password':
+          errors.password =
           event.target.value.length > 0
               ? ''
               : 'El campo contraseña no puede quedar vacio!';
@@ -161,7 +161,7 @@ class AuthForm extends Component {
     if(this.props.authState === STATE_LOGIN) {
       this.props.signIn(this.state);
     };
-  }; 
+  };
 
   renderButtonText() {
     const { buttonText } = this.props;
@@ -178,10 +178,10 @@ class AuthForm extends Component {
   }
 
   render() {
-    let loginError, showPreloader, tokenExpired;
+    let loginError, tokenExpired;
 
     if(this.props.tokenExpired) {
-      tokenExpired = (<UncontrolledAlert color="secondary"> 
+      tokenExpired = (<UncontrolledAlert color="secondary">
         Tu sesión se venció, ingresa nuevamente.
       </UncontrolledAlert>)
     }
@@ -191,14 +191,14 @@ class AuthForm extends Component {
     }
 
     if(this.props.authState === STATE_SIGNUP) {
-      loginError = (<UncontrolledAlert color="secondary"> 
+      loginError = (<UncontrolledAlert color="secondary">
         Solo empleados de CAMBIO POSADAS pueden registrarse.
       </UncontrolledAlert>);
   }
 
     if(this.props.showError) {
-        loginError = (<UncontrolledAlert color="secondary"> 
-         Email y/o contraseña incorrecta! 
+        loginError = (<UncontrolledAlert color="secondary">
+         Email y/o contraseña incorrecta!
         </UncontrolledAlert>);
     }
 
@@ -221,7 +221,6 @@ class AuthForm extends Component {
             />
           </div>
         )}
-        {showPreloader}
         {loginError}
         {tokenExpired}
         <FormGroup>
@@ -284,7 +283,7 @@ class AuthForm extends Component {
             <Col>
               <Label>Contraseña</Label>{(this.isSignup)?<span className='required'>*</span>:''}
               <Input
-                className={(this.state.password && !this.state.errors.password && this.props.authState === STATE_SIGNUP) ? "is-valid form-control" : ""} 
+                className={(this.state.password && !this.state.errors.password && this.props.authState === STATE_SIGNUP) ? "is-valid form-control" : ""}
                 type="password"
                 placeholder="contraseña"
                 id="password"
@@ -293,7 +292,7 @@ class AuthForm extends Component {
                 <small className="text-danger">{this.state.errors.password}</small>
               </div>
             </Col>
-          </Row>          
+          </Row>
         </FormGroup>
         {this.isSignup && (
           <Row>
@@ -360,7 +359,6 @@ const mapStateToProps = (state) => {
   return {
     showError: state.auth.showError,
     successLogin: state.auth.successLogin,
-    showPreloader: state.auth.showPreloader,
     tokenExpired: state.dashboard.tokenExpired
   }
 }

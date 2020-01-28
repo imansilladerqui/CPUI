@@ -47,12 +47,10 @@ class Sidebar extends React.Component {
         navItems = navItemsUser;
         break
       case 'admin':
-        // navItems = navItemsAdmin;
-        navItems = navItemsUser;
+        navItems = navItemsAdmin;
         break
       case 'owner':
-        // navItems = navItemsOwner;
-        navItems = navItemsUser;
+        navItems = navItemsOwner;
         break;
       default:
         navItems = navItemsUser;

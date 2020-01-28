@@ -1,31 +1,22 @@
 const initState = {
     showError: false,
-    successLogin: false,
-    showPreloader: false
+    successLogin: false
 }
 
 const AuthReducer = (state = initState, action) => {
     switch (action.type) {
         case 'CLEAR_STATE':
             return initState
-
-        case 'SHOW_PRELOADER':
-            return {
-                ...state,
-                showPreloader: true
-            }
         case 'LOGIN_OK':
             return {
                 ...state,
-                successLogin: true,
-                showPreloader: false
+                successLogin: true
             }
 
         case 'LOGIN_ERROR':
             return {
                 ...state,
-                showError: true,
-                showPreloader: false
+                showError: true
             }
 
         default:

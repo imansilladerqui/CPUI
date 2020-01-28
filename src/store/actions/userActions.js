@@ -1,4 +1,5 @@
 const Request = require('superagent');
+const SETUP = require('../../config');
 
 const expiredMessage = 'Token has expired';
 
@@ -6,7 +7,7 @@ export const deleteSelectedUser = (id) => {
 
     return dispatch => {
         Request
-            .delete(`https://protected-mountain-77919.herokuapp.com/api/usuario/${id}`)
+            .delete(`${SETUP.CONFIG.backendApi}/api/usuario/${id}`)
             .set({'authorization': 'Bearer ' + localStorage.getItem('_token')})
             .accept('application/json')
             .then(()=>{
@@ -19,7 +20,7 @@ export const getUsuarios = () => {
 
     return dispatch => {
         Request
-        .get('https://protected-mountain-77919.herokuapp.com/api/allusuarios')
+        .get(`${SETUP.CONFIG.backendApi}/api/allusuarios`)
         .set({'authorization': 'Bearer ' + localStorage.getItem('_token')})
         .accept('application/json')
         .then(res=>{
@@ -45,7 +46,7 @@ export const getProfile = (id) => {
 
     return dispatch => {
         Request
-        .get(`https://protected-mountain-77919.herokuapp.com/api/profile/${id}`)
+        .get(`${SETUP.CONFIG.backendApi}/api/profile/${id}`)
         .set({'authorization': 'Bearer ' + localStorage.getItem('_token')})
         .accept('application/json')
         .then(res=>{
@@ -69,7 +70,7 @@ export const updateProfile = (id, data) => {
 
     return dispatch => {
         Request
-        .post(`https://protected-mountain-77919.herokuapp.com/api/profile/${id}`)
+        .post(`${SETUP.CONFIG.backendApi}/api/profile/${id}`)
         .set({'authorization': 'Bearer ' + localStorage.getItem('_token')})
         .accept('application/json')
         .send(data)

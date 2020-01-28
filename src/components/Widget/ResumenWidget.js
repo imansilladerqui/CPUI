@@ -1,53 +1,27 @@
-import {Card, CardBody, CardTitle, CardSubtitle, Row} from 'reactstrap';
-import classNames from 'classnames';
-import PropTypes from 'utils/propTypes';
+import {Card, CardBody, CardTitle, CardSubtitle} from 'reactstrap';
 import React from 'react';
 
-const ResumenWidget = ({
-  bgColor,
-  entidad,
-  iconProps,
-  logo,
-  subtitle,
-  valor,
-  className,
-  ...restProps
-}) => {
-  let entidadHeader;
-  if (logo) {
-    entidadHeader = (
-      <div>
-        <Row>
-          <img src={logo} alt={subtitle} id="logoIcon"></img>
-        </Row>
-      </div>
-    )
-  } else {
-    entidadHeader = entidad
-  }
-  const classes = classNames('cr-widget', className, {
-    [`bg-${bgColor}`]: bgColor,
-  });
+const ResumenWidget = ({tarjetaTitle, subtitleMayor, entidadMayor, valorMayor, subtitleMenor, entidadMenor, valorMenor, ...restProps}) => {
   return (
-    <Card inverse className={classes} {...restProps}>
+    <Card inverse {...restProps} className='destacadoCard'>
+      <h1>{tarjetaTitle}</h1>
       <CardBody className="text-center">
-        <CardSubtitle className="mt-0">{subtitle}</CardSubtitle>
-        <CardTitle style={{ marginBottom: '0.5rem', marginTop: '0.5rem' }}>{entidadHeader}</CardTitle>
-        <CardSubtitle className="mt-0">{valor}</CardSubtitle>
+        <CardSubtitle className="mt-0">{subtitleMayor}</CardSubtitle>
+        <CardTitle style={{ marginBottom: '0.5rem', marginTop: '0.5rem' }}>
+          <img className='card-image-widget' alt={entidadMayor} src={`../entidades/${entidadMayor}.png`}/>
+        </CardTitle>
+        <CardSubtitle className="mt-0">{valorMayor}</CardSubtitle>
+      </CardBody>
+      <div className='border-divisor'></div>
+      <CardBody className="text-center">
+        <CardSubtitle className="mt-0">{subtitleMenor}</CardSubtitle>
+        <CardTitle style={{ marginBottom: '0.5rem', marginTop: '0.5rem' }}>
+          <img className='card-image-widget' alt={entidadMenor} src={`../entidades/${entidadMenor}.png`}/>
+        </CardTitle>
+        <CardSubtitle className="mt-0">{valorMenor}</CardSubtitle>
       </CardBody>
     </Card>
   );
-};
-
-ResumenWidget.propTypes = {
-  bgColor: PropTypes.string,
-  iconProps: PropTypes.object,
-  subtitle: PropTypes.string,
-};
-
-ResumenWidget.defaultProps = {
-  bgColor: 'primary',
-  iconProps: { size: 50 },
 };
 
 export default ResumenWidget;

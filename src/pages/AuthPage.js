@@ -1,5 +1,4 @@
 import AuthForm, { STATE_LOGIN } from 'components/AuthForm';
-import {connect} from 'react-redux';
 import React from 'react';
 import { Card, Col, Row} from 'reactstrap';
 
@@ -42,10 +41,4 @@ class AuthPage extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    showPreloader: state.auth.showPreloader
-  }
-}
-
-export default connect(mapStateToProps)(AuthPage);
+export default AuthPage;

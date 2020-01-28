@@ -1,4 +1,6 @@
 const Request = require('superagent');
+const SETUP = require('../../config');
+
 
 export const clearState = () => {
     return dispatch => {
@@ -10,11 +12,8 @@ export const clearState = () => {
 
 export const loginUser = (credentials) => {
     return dispatch => {
-        dispatch({
-            type: 'SHOW_PRELOADER'
-        })
         Request
-        .post('https://protected-mountain-77919.herokuapp.com/api/login')
+        .post(`${SETUP.CONFIG.backendApi}/api/login`)
         .set('Content-Type', 'application/x-www-form-urlencoded')
         .send({email: credentials.email, password: credentials.password })
         .then(res=>{
@@ -34,11 +33,8 @@ export const loginUser = (credentials) => {
 
 export const signUp = (credentials) => {
     return dispatch => {
-        dispatch({
-            type: 'SHOW_PRELOADER'
-        })
         Request
-        .post('https://protected-mountain-77919.herokuapp.com/api/signup')
+        .post(`${SETUP.CONFIG.backendApi}/api/signup`)
         .set('Content-Type', 'application/x-www-form-urlencoded')
         .send({nombre: credentials.nombre, apellido: credentials.apellido, email: credentials.email, password: credentials.password })
         .then(() => {

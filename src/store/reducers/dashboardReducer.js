@@ -1,47 +1,19 @@
 const initState = {
     allUsuarios:[],
-    alpe:[],
-    columbia: [],
-    frances: [],
-    galicia:[],
-    icbc:[],
-    maguitur:[],
-    maxinta:[],
-    montevideo:[],
-    nacion:[],
-    patagonia:[],
-    provincia:[],
-    santander:[],
-    showPreloader: false,
-    supervielle: [],
+    dashboardData: [],
     tokenExpired: false,
-    user:[],
-    vaccaro:[]
+    user:[]
 }
 
 const dashboardReducer = (state = initState, action) => {
     switch (action.type) {
         case 'CLEAR_STATE':
             return initState
-
-        case 'SHOW_PRELOADER':
+        case 'GET_DASHBOARD_DATA':
             return {
                 ...state,
-                showPreloader: true
+                dashboardData: action.dashboard
             }
-
-        case 'HIDE_PRELOADER':
-            return {
-                ...state,
-                showPreloader: false
-            }
-
-        case 'GET_ENTIDADES_HISTORICO':
-            return {
-                ...state,
-                [action.entidadesNombre]: action.entidadesHistorico
-            }
-
         case 'GET_USER':
             return {
                 ...state,
