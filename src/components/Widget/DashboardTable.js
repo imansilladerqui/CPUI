@@ -27,7 +27,7 @@ const DashboardTable = (props) => {
         );
     }
 
-    const ultimaVariacion = ({value}) => (value >= 0) ? <span style={{ color: '#3AAC7F' }}> + {value}</span> : <span style={{ color: '#D31E1E' }}> - {value} {MdArrowDownward}</span>;
+    const ultimaVariacion = ({value}) => (value >= 0) ? <span style={{ color: '#3AAC7F' }}>{value}</span> : <span style={{ color: '#D31E1E' }}>{value}</span>;
 
     const LocalPlugin = require('griddle-react').plugins.LocalPlugin;
 
